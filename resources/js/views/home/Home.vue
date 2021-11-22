@@ -1,5 +1,5 @@
 <template>
-    <h1>HOME</h1>
+
 </template>
 
 <script>
@@ -9,8 +9,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    h1 {
-        text-align: center;
-        color: red;
-    }
+
+
 </style>
