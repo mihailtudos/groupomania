@@ -26,7 +26,7 @@
         <script src="/js/app.js" defer></script>
     </head>
     <body>
-        <div id="app">
+        <div id="app" style="max-width: 1300px; margin: auto">
             <index></index>
         </div>
     </body>

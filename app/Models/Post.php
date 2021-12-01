@@ -11,4 +11,9 @@ class Post extends Model
     protected $fillable = [
         'slug', 'excerpt', 'body', 'user_id', 'image'
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

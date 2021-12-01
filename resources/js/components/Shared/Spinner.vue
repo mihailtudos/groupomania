@@ -11,7 +11,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+$twitter-color: #50b7f5;
+$twitter-background: #e6ecf0;
 .lds-ripple {
     display: inline-block;
     position: relative;
@@ -20,7 +22,7 @@ export default {
 }
 .lds-ripple div {
     position: absolute;
-    border: 4px solid #fff;
+    border: 4px solid $twitter-color;
     opacity: 1;
     border-radius: 50%;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
