@@ -1,21 +1,18 @@
 <template>
     <div class="sidebar">
         <div class="sidebar--menu">
-            <router-link to="/" style="">
-                <i class="fas fa-campground "></i>
-            </router-link>
-            <div class="sidebar--option active">
+            <router-link :to="{ name: 'home' }" class="sidebar--option active">
                 <span class="material-icons">
                     <i class="fab fa-accusoft"></i>
                 </span>
                 <h2>Home</h2>
-            </div>
-            <div class="sidebar--option">
+            </router-link>
+            <router-link :to="{ name: 'home' }" class="sidebar--option">
                 <span class="material-icons">
                     <i class="fas fa-search"></i>
                 </span>
                 <h2>Explore</h2>
-            </div>
+            </router-link>
             <div class="sidebar--option">
                 <span class="material-icons">
                     <i class="fas fa-bell"></i>
@@ -37,6 +34,11 @@
             <TweetButton :style="'width: 100%'" />
         </div>
         <div class="sidebar--footer">
+            <div class="sidebar--footer__account">
+                <span>{{ user }}</span>
+                <router-link :to="{ name: 'profile' }"><i class="fas fa-id-card-alt"></i></router-link>
+                <i class="fas fa-sign-out-alt" @click="handleLogout"></i>
+            </div>
             <div class="sidebar--footer__links">
                 <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Policy</router-link>
                 <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Cookie</router-link>
@@ -54,6 +56,21 @@ import TweetButton from "../Shared/TweetButton";
 export default {
     name: "Sidebar",
     components: {TweetButton},
+    methods: {
+        handleLogout() {
+            this.$store.dispatch('currentUser/logoutUser');
+            window.location.href = 'login';
+        }
+    },
+    beforeCreate() {
+        this.$store.commit('currentUser/setUser', JSON.parse(localStorage.getItem('user')));
+    },
+    computed: {
+        user() {
+            const user = this.$store.getters["currentUser/user"];
+            return user.name && user.name.split(' ')[0]
+        },
+    }
 }
 </script>
 
@@ -75,11 +92,14 @@ $twitter-background: #e6ecf0;
         align-items: baseline;
         justify-content: flex-start;
         cursor: pointer;
-        margin-bottom: 1rem;
+        margin-bottom: .5rem;
+        padding: .5rem 1rem;
         h2 {
             font-weight: 700;
-            font-size: 20px;
-            margin: 0 0 0 10px;
+            font-size: 1rem;
+        }
+        i {
+            font-size: 1.5rem;
         }
         &:hover {
             background-color: $twitter-background;
@@ -104,6 +124,8 @@ $twitter-background: #e6ecf0;
     &--footer {
         margin-bottom: 1rem;
         &__links {
+            border-top: 2px solid $twitter-background;
+            padding-top: .3rem;
             display: flex;
             flex-flow: row wrap;
             align-items: center;
@@ -117,6 +139,16 @@ $twitter-background: #e6ecf0;
             margin-top: .5rem;
             text-align: center;
             font-size: .7rem;
+        }
+        &__account {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .5rem;
+            i {
+                font-size: 1rem;
+                cursor: pointer;
+            }
         }
     }
 }

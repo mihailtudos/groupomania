@@ -3,7 +3,7 @@
         <Sidebar />
         <div class="content">
             <div class="content__header">
-                <h2>Home</h2>
+                <h2>{{ this.$route.name }}</h2>
                 <SearchBar class="search-mobile"/>
                 <span class="mobile-menu" @click="mobileMenuHandler">
                     <i class="fas fa-search"></i>
@@ -11,7 +11,7 @@
             </div>
             <router-view/>
         </div>
-        <Widget />
+        <Widget/>
     </div>
 </template>
 
@@ -30,6 +30,26 @@ export default {
             console.log(sidebar)
             content.classList.toggle('show-menu');
             sidebar.classList.toggle('show-sidebar');
+        }
+    },
+    computed: {
+        loggedIn: {
+            get() {
+                return this.$store.state.currentUser.loggedIn;
+            }
+        },
+        currentUser: {
+            get() {
+                return this.$store.state.currentUser.user;
+            }
+        }
+    },
+    created() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+        } else  {
+            window.location.replace('/login');
         }
     }
 }
@@ -56,9 +76,6 @@ $twitter-background: #e6ecf0;
         overflow-y: scroll;
         -ms-overflow-style: none;
         scrollbar-width: none;
-        &.show-menu {
-
-        }
         &__header {
             position: sticky;
             top: 0;
@@ -73,6 +90,7 @@ $twitter-background: #e6ecf0;
             h2 {
                 font-size: 20px;
                 font-weight: 800;
+                text-transform:capitalize;
             }
             .search-mobile {
                 visibility: hidden;

@@ -9,7 +9,7 @@
                 name="excerpt" placeholder="What's happening?"></textarea>
         </div>
         <div class="form--footer">
-            <input type="file" name="file">
+            <ImageFileBrowseIcon />
             <button
                 class="btn-secondary form-button">
                 Create tweet <i class="fas fa-feather-alt"></i>
@@ -19,8 +19,10 @@
 </template>
 
 <script>
+import ImageFileBrowseIcon from "../UI/ImageFileBrowseIcon";
 export default {
     name: "TweetForm",
+    components: {ImageFileBrowseIcon},
     data() {
         return {
             excerpt: '',

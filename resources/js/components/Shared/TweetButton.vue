@@ -28,7 +28,7 @@ export default {
         }
     },
     methods: {
-        modalHandler() {
+        hideModal() {
             this.show = !this.show;
         }
     }

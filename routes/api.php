@@ -19,12 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 
-
-Route::middleware('auth:sanctum')->get('/user', function () {
-
-});
-
 Route::group(['middleware'=>['auth:sanctum']], function () {
+    Route::prefix('user')->group(function () {
+        Route::get('/current', [\App\Http\Controllers\Api\UserController::class, 'currentUser']);
+    });
     Route::apiResource('/posts', PostController::class)->except('index');
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/posts', [PostController::class, 'index']);

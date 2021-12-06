@@ -8,7 +8,7 @@
                 <input type="text" placeholder="What's happening?">
             </div>
             <div class="footer">
-                <i class="fas fa-feather-alt"></i>
+                <ImageFileBrowseIcon :size="'20'"/>
                 <button class="tweet-button">Tweet</button>
             </div>
         </form>
@@ -16,9 +16,10 @@
 </template>
 
 <script>
+import ImageFileBrowseIcon from "../UI/ImageFileBrowseIcon";
 export default {
     name: "TweetBox",
-
+    components: {ImageFileBrowseIcon},
 }
 </script>
 
@@ -47,7 +48,7 @@ $twitter-background: #e6ecf0;
         }
         .footer {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             button {
                 background-color: $twitter-color;
@@ -57,10 +58,6 @@ $twitter-background: #e6ecf0;
                 border-radius: 30px;
                 width: 100px;
                 height: 40px;
-                cursor: pointer;
-            }
-            i {
-                font-size: 40px;
                 cursor: pointer;
             }
         }

@@ -31,7 +31,7 @@ return [
     */
 
     'expiration' => null,
-
+//    'guard' => 'sanctum',
     /*
     |--------------------------------------------------------------------------
     | Sanctum Middleware

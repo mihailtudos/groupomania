@@ -1,28 +1,31 @@
 require('./bootstrap');
 import router from "./routes";
 import VueRouter from "vue-router";
-import Vuex from 'vuex';
 import Index from './Index';
-
-// const store = new Vuex.store(storeDefinition);
 
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
+Vue.component('login-form', require('./components/Auth/LoginForm').default)
 
+import store from './store/index';
+
+Vue.mixin({
+    methods: {
+        capitalizeFirstLetter: str => str.charAt(0).toUpperCase() + str.slice(1),
+        isEmailValid: email => {
+            return email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        },
+        isPasswordValid: password => {
+            return password.length >= 6;
+        }
+    }
+});
 
 const app = new Vue({
     el: '#app',
+    store,
     router,
     components: {
         "index": Index,
     },
-    async beforeCreate() {
-        // this.$store.dispatch('loadStoreState');
-        await axios.get('/sanctum/csrf-cookie');
-        await axios.post('/login', {
-            email: 'mihairmcr7@gmail.com',
-            password: 'password'
-        });
-        await axios.get('/user');
-    }
 });

@@ -82,3 +82,44 @@ p {
   background: white;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
+.centered-content {
+  padding: 5rem 1rem 1rem 1rem;
+  max-width: 700px;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+}
+.centered-content img {
+  height: 250px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 10px;
+}
+.centered-content--form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.centered-content--form form {
+  margin-top: 2rem;
+}
+
+@media (max-width: 500px) {
+  .centered-content--form {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .centered-content--form h1 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  .centered-content--form form {
+    margin-top: 0;
+  }
+}
