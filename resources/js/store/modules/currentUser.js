@@ -1,8 +1,12 @@
+import {isLoggedIn, logOut} from "../../components/Shared/util/auth";
+
 const state = {
-    user: {}
+    user: {},
+    isLoggedIn: false,
 };
 const getters = {
     user: (state) => {
+
         return {
             email: state.user.email,
             name: state.user.name
@@ -10,54 +14,38 @@ const getters = {
     },
 };
 const actions = {
-    loginUser( {commit}, user) {
-        axios.post('/api/login', {
-            email: user.email,
-            password: user.password
-        })
-        .then((response) => {
-            if (response.data.token) {
-                localStorage.setItem(
-                    'token',
-                    response.data.token
-                );
-                localStorage.setItem(
-                    'user',
-                    JSON.stringify(response.data.user)
-                );
+    loadStoredState(context) {
+        context.commit("setLoggedIn", isLoggedIn());
+    },
+    async loadUser({ commit, dispatch }) {
+        if (isLoggedIn()) {
+            try {
+                const user = (await axios.get("/user")).data;
+                localStorage.setItem('user', JSON.stringify(user));
+                commit("setUser", user);
+                commit("setLoggedIn", true);
+            } catch (error) {
+                dispatch("logout");
             }
-        }).then(() => {
-        axios.get('/sanctum/csrf-cookie')
-            .then(() => {
-                axios.post('/login', {
-                    email: user.email,
-                    password: user.password
-                }).then((response) => {
-                    window.location.href = '/';
-                })
-            })
-        });
+        }
     },
-    async logoutUser({}) {
-        await  axios.post('/api/logout', {
-            token: localStorage.getItem('token'),
-        }).then(() => {
-            localStorage.removeItem('token');
-            axios.post('/logout', {
-                token: localStorage.getItem('token')
-            });
-        })
+    async logout({}) {
+        try {
+            await axios.post('/logout');
+            logOut();
+            window.location.href = '/auth/login';
+            window.location.go();
+        } catch (error) {
+            await axios.post('/logout');
+        }
     },
-    // getUser({ commit }) {
-    //     axios.get('/api/user/current')
-    //         .then(response => {
-    //             commit('setUser', response.data)
-    //         });
-    // },
 };
 const mutations = {
     setUser(state, data) {
         state.user = data;
+    },
+    setLoggedIn(state, payload) {
+        state.isLoggedIn = payload;
     }
 };
 

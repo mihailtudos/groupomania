@@ -58,17 +58,15 @@ export default {
     components: {TweetButton},
     methods: {
         handleLogout() {
-            this.$store.dispatch('currentUser/logoutUser');
-            window.location.href = 'login';
+            this.$store.dispatch('currentUser/logout');
         }
     },
-    beforeCreate() {
-        this.$store.commit('currentUser/setUser', JSON.parse(localStorage.getItem('user')));
-    },
+    // beforeCreate() {
+    //     this.$store.commit('currentUser/setUser', JSON.parse(localStorage.getItem('user')));
+    // },
     computed: {
         user() {
-            const user = this.$store.getters["currentUser/user"];
-            return user.name && user.name.split(' ')[0]
+
         },
     }
 }

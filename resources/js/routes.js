@@ -4,6 +4,7 @@ import Post from "./views/post/Post";
 import Login from "./components/Auth/Login";
 import Policy from "./components/Policy/Policy";
 import Profile from "./components/Profile/Profile";
+import Register from "./components/Auth/Register";
 
 const routes = [
     {
@@ -17,9 +18,14 @@ const routes = [
         name: "post",
     },
     {
-        path: "/login",
+        path: "/auth/login",
         component: Login,
         name: "login",
+    },
+    {
+        path: "/auth/register",
+        component: Register,
+        name: "register",
     },
     {
         path: "/cookies",

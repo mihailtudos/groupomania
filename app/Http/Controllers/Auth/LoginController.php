@@ -42,7 +42,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ($request->isXmlHttpRequest()) {
-            return response(null, 200);
+            return response(null, 204);
         }
     }
 }

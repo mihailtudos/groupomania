@@ -1,17 +1,24 @@
 <template>
-    <div id="app-container">
-        <Sidebar />
-        <div class="content">
-            <div class="content__header">
-                <h2>{{ this.$route.name }}</h2>
-                <SearchBar class="search-mobile"/>
-                <span class="mobile-menu" @click="mobileMenuHandler">
+    <div>
+        <div id="app-container" v-if="loggedIn">
+            <Sidebar />
+            <div class="content">
+                <div class="content__header">
+                    <h2>{{ this.$route.name }}</h2>
+                    <SearchBar class="search-mobile"/>
+                    <span class="mobile-menu" @click="mobileMenuHandler">
                     <i class="fas fa-search"></i>
                 </span>
+                </div>
+                <router-view/>
             </div>
-            <router-view/>
+            <Widget/>
         </div>
-        <Widget/>
+        <div v-else>
+            <div class="login-container">
+                <router-view/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -20,6 +27,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Post from "./components/Shared/PostItem";
 import Widget from "./components/Widget/Widget";
 import SearchBar from "./components/Shared/SearchBar";
+import { mapState, mapGetters } from "vuex";
+
 export default {
     name: "Index",
     components: {SearchBar, Widget, Post, Sidebar},
@@ -27,31 +36,23 @@ export default {
         mobileMenuHandler() {
             const content = document.querySelector('.content');
             const sidebar = document.querySelector('.sidebar');
-            console.log(sidebar)
             content.classList.toggle('show-menu');
             sidebar.classList.toggle('show-sidebar');
         }
     },
     computed: {
+        ...mapGetters({
+            user: "currentUser/user"
+        }),
+        ...mapState({
+           'isLoggedIn' : 'currentUser/user'
+        }),
         loggedIn: {
             get() {
-                return this.$store.state.currentUser.loggedIn;
+                return this.$store.state.currentUser.isLoggedIn;
             }
         },
-        currentUser: {
-            get() {
-                return this.$store.state.currentUser.user;
-            }
-        }
     },
-    created() {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        } else  {
-            window.location.replace('/login');
-        }
-    }
 }
 </script>
 
@@ -103,7 +104,15 @@ $twitter-background: #e6ecf0;
     .content::-webkit-scrollbar {
         display: none;
     }
+    .login-container {
+        height: 80vh;
+        width: 100%;
+        display: flex;
+        align-content: center;
+        justify-items: center;
+    }
 }
+
 @media (max-width: 1000px) {
     #app-container {
         .search-mobile {

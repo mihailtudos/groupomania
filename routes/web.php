@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::middleware('auth:sanctum')->group(function () {
-    // fallback route (all routs that don't have api in it will be handled by Vue)
-    Route::get('/{any?}', function () {
-        return view('welcome');
-    })->where('any', '^(?!api\/)[\/\w\.\,-]*');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
+// fallback route (all routs that don't have api in it will be handled by Vue)
+Route::get('/{any?}', function () {
+    return view('welcome');
+})->where('any', '^(?!api\/)[\/\w\.\,-]*');
+//
+//Route::group(function () {
+//
+//});
+//

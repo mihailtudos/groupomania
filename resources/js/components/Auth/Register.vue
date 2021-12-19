@@ -1,7 +1,19 @@
 <template>
-    <div id="login">
-        <div class="login">
+    <div id="register">
+        <div class="register">
             <form @submit.prevent="handleLogin">
+                <div class="form-group">
+                    <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
+                    <input id="name"
+                           v-model="formData.name"
+                           type="text"
+                           class="form-control"
+                           name="name"
+                           autocomplete="name"
+                           :class="[{'is-invalid': errorFor('name')}]"
+                           autofocus>
+                    <v-error :errors="errorFor('name')" />
+                </div>
                 <div class="form-group">
                     <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
                     <input id="email"
@@ -26,22 +38,25 @@
                         name="password" >
                     <v-error :errors="errorFor('password')" />
                 </div>
-                <div class="login--button">
-                    <button style="width: 100%" type="submit" class="btn btn-primary" >Login</button>
+                <div class="form-group">
+                    <label for="confirm_password" class="col-md-4 col-form-label text-md-right"> Re-type password </label>
+                    <input
+                        id="confirm_password"
+                        v-model="formData.confirm_password"
+                        type="password"
+                        class="form-control"
+                        :class="[{'is-invalid': errorFor('confirm_password')}]"
+                        name="confirm_password" >
+                    <v-error :errors="errorFor('confirm_password')" />
+                </div>
+                <div class="register--button">
+                    <button style="width: 100%"  type="submit" class="btn btn-primary" >Login</button>
                 </div>
                 <hr />
-
-               <div class="login--footer">
-                   <div>
-                       No account yet?
-                       <router-link :to="{name: 'register'}" class="font-weight-bold">register</router-link>
-                   </div>
-
-                   <div>
-                       Forgotten password?
-                       <router-link :to="{name: 'home'}" class="font-weight-bold">reset password</router-link>
-                   </div>
-               </div>
+                <div>
+                    Already registered?
+                    <router-link :to="{name: 'login'}" class="register--footer">login</router-link>
+                </div>
             </form>
         </div>
     </div>
@@ -53,13 +68,15 @@ import {logIn} from "../Shared/util/auth";
 
 export default {
     mixins: [validationErrors],
-    name: "Login",
+    name: "Register",
     data() {
         return {
             loading: false,
             formData: {
                 email: '',
                 password: '',
+                confirm_password: '',
+                name: ''
             }
         }
     },
@@ -97,11 +114,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#login {
+#register {
     display: flex;
     margin-top: 5rem;
     justify-content: center;
-    .login {
+    .register {
         width: 100%;
         max-width: 400px;
         form {
@@ -112,9 +129,9 @@ export default {
                 flex-direction: column;
                 gap: .3rem;
                 input {
-                    border: 2px solid #1a202c;
                     width: 100%;
                     padding: .5rem .2rem;
+                    border: 2px solid #1a202c;
                     font-size: 1rem;
                     &.is-invalid {
                         border-color: red;
@@ -130,10 +147,8 @@ export default {
             justify-content: flex-end;
         }
         &--footer {
-            a {
-                font-weight: bold;
-                color: #50b7f5;
-            }
+            color: #50b7f5;
+            font-weight: bold;
         }
     }
 }
