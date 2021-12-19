@@ -2111,6 +2111,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -2126,9 +2127,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     mobileMenuHandler: function mobileMenuHandler() {
-      var content = document.querySelector('.content');
+      var overlap = document.querySelector('#overlap');
       var sidebar = document.querySelector('.sidebar');
-      content.classList.toggle('show-menu');
+      overlap.classList.toggle('show-menu');
       sidebar.classList.toggle('show-sidebar');
     }
   },
@@ -2308,6 +2309,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Shared_util_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/util/auth */ "./resources/js/components/Shared/util/auth.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2341,6 +2351,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "LoginForm",
   data: function data() {
@@ -2357,23 +2368,51 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleLogin: function handleLogin() {
-      if (!this.isEmailValid(this.formData.email)) {
-        this.formData.errors.email.push('Entered email has an incorrect format');
-      } else {
-        this.formData.errors.email = function () {
-          return [];
-        };
+      var _this = this;
 
-        if (this.isPasswordValid(this.formData.password)) {
-          this.formData.errors.password = function () {
-            return [];
-          };
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _this.errors = null;
+                _context.prev = 2;
+                _context.next = 5;
+                return axios.get("/sanctum/csrf-cookie");
 
-          this.$store.dispatch('currentUser/loginUser', this.formData);
-        } else {
-          this.formData.errors.password.push('Password must be at least 6 characters');
-        }
-      }
+              case 5:
+                _context.next = 7;
+                return axios.post("/login", _this.formData);
+
+              case 7:
+                (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_1__.logIn)(); // await this.$store.commit('currentUser/setUser', user);
+
+                _context.next = 10;
+                return _this.$store.dispatch("currentUser/loadUser");
+
+              case 10:
+                console.log('hit');
+                window.location.href('/');
+                window.location.go();
+                _context.next = 18;
+                break;
+
+              case 15:
+                _context.prev = 15;
+                _context.t0 = _context["catch"](2);
+                _this.errors = _context.t0.response && _context.t0.response.data.errors;
+
+              case 18:
+                _this.loading = false;
+
+              case 19:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[2, 15]]);
+      }))();
     }
   }
 });
@@ -3006,7 +3045,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Sidebar",
@@ -3018,11 +3056,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('currentUser/logout');
     }
   },
-  // beforeCreate() {
-  //     this.$store.commit('currentUser/setUser', JSON.parse(localStorage.getItem('user')));
-  // },
   computed: {
-    user: function user() {}
+    user: function user() {
+      var user = this.$store.state.currentUser.user;
+      return user.name;
+    }
   }
 });
 
@@ -3372,7 +3410,6 @@ function logIn(user) {
 }
 function logOut() {
   localStorage.setItem("isLoggedIn", false);
-  localStorage.removeItem("user");
 }
 
 /***/ }),
@@ -3514,7 +3551,7 @@ var actions = {
               commit = _ref.commit, dispatch = _ref.dispatch;
 
               if (!(0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_1__.isLoggedIn)()) {
-                _context.next = 14;
+                _context.next = 13;
                 break;
               }
 
@@ -3524,23 +3561,22 @@ var actions = {
 
             case 5:
               user = _context.sent.data;
-              localStorage.setItem('user', JSON.stringify(user));
               commit("setUser", user);
               commit("setLoggedIn", true);
-              _context.next = 14;
+              _context.next = 13;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](2);
               dispatch("logout");
 
-            case 14:
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 11]]);
+      }, _callee, null, [[2, 10]]);
     }))();
   },
   logout: function logout(_ref2) {
@@ -8053,7 +8089,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#app-container[data-v-147fb424] {\n  display: flex;\n  height: 100vh;\n  padding: 0 10px;\n  justify-content: space-between;\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 16px;\n}\n#app-container h1[data-v-147fb424] {\n  text-align: center;\n  color: red;\n}\n#app-container .content[data-v-147fb424] {\n  width: 100%;\n  border: 1px solid #e6ecf0;\n  overflow-y: scroll;\n  -ms-overflow-style: none;\n  scrollbar-width: none;\n}\n#app-container .content__header[data-v-147fb424] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  background-color: white;\n  z-index: 100;\n  border: 1px solid #e6ecf0;\n  padding: 15px 20px;\n  display: flex;\n  justify-content: space-between;\n  gap: 1rem;\n  align-items: baseline;\n}\n#app-container .content__header h2[data-v-147fb424] {\n  font-size: 20px;\n  font-weight: 800;\n  text-transform: capitalize;\n}\n#app-container .content__header .search-mobile[data-v-147fb424] {\n  visibility: hidden;\n}\n#app-container .content__header .mobile-menu[data-v-147fb424] {\n  display: none;\n}\n#app-container .content[data-v-147fb424]::-webkit-scrollbar {\n  display: none;\n}\n#app-container .login-container[data-v-147fb424] {\n  height: 80vh;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  justify-items: center;\n}\n@media (max-width: 1000px) {\n#app-container .search-mobile[data-v-147fb424] {\n    max-width: 200px;\n    visibility: visible !important;\n}\n}\n@media (max-width: 650px) {\n#app-container .content__header[data-v-147fb424] {\n    flex-direction: row-reverse;\n}\n#app-container .content__header .search-mobile[data-v-147fb424] {\n    display: none;\n}\n#app-container .content__header .mobile-menu[data-v-147fb424] {\n    display: inline-block !important;\n    font-size: 30px;\n    cursor: pointer;\n}\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#app-container[data-v-147fb424] {\n  display: flex;\n  height: 100vh;\n  padding: 0 10px;\n  justify-content: space-between;\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 16px;\n}\n#app-container h1[data-v-147fb424] {\n  text-align: center;\n  color: red;\n}\n#app-container .content[data-v-147fb424] {\n  width: 100%;\n  border: 1px solid #e6ecf0;\n  overflow-y: scroll;\n  -ms-overflow-style: none;\n  scrollbar-width: none;\n}\n#app-container .content #overlap[data-v-147fb424] {\n  visibility: hidden;\n}\n#app-container .content #overlap.show-menu[data-v-147fb424] {\n  position: fixed;\n  visibility: visible !important;\n  top: 0;\n  bottom: 0;\n  width: 100vw;\n  height: 100vh;\n  background: #4a5568;\n  opacity: 0.2;\n  z-index: 999;\n}\n#app-container .content__header[data-v-147fb424] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  background-color: white;\n  z-index: 100;\n  border: 1px solid #e6ecf0;\n  padding: 15px 20px;\n  display: flex;\n  justify-content: space-between;\n  gap: 1rem;\n  align-items: baseline;\n}\n#app-container .content__header h2[data-v-147fb424] {\n  font-size: 20px;\n  font-weight: 800;\n  text-transform: capitalize;\n}\n#app-container .content__header .search-mobile[data-v-147fb424] {\n  visibility: hidden;\n}\n#app-container .content__header .mobile-menu[data-v-147fb424] {\n  display: none;\n}\n#app-container .content[data-v-147fb424]::-webkit-scrollbar {\n  display: none;\n}\n#app-container .login-container[data-v-147fb424] {\n  height: 80vh;\n  width: 100%;\n  display: flex;\n  align-content: center;\n  justify-items: center;\n}\n@media (max-width: 1000px) {\n#app-container .search-mobile[data-v-147fb424] {\n    max-width: 200px;\n    visibility: visible !important;\n}\n}\n@media (max-width: 650px) {\n#app-container .content__header[data-v-147fb424] {\n    flex-direction: row-reverse;\n}\n#app-container .content__header .search-mobile[data-v-147fb424] {\n    display: none;\n}\n#app-container .content__header .mobile-menu[data-v-147fb424] {\n    display: inline-block !important;\n    font-size: 30px;\n    cursor: pointer;\n}\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8197,7 +8233,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n}\n.post-container[data-v-d2e5ef7c] {\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: center;\n  gap: 1rem;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n}\n.post-container[data-v-d2e5ef7c] {\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: center;\n  gap: 1rem;\n}\n@media (max-width: 400px) {\n.post__body--media[data-v-d2e5ef7c] {\n    width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n    height: 100%;\n    width: 100%;\n    border-radius: 20px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n    padding: 1rem;\n    display: flex;\n    justify-content: center;\n    gap: 1rem;\n}\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8413,7 +8449,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -42738,6 +42774,11 @@ var render = function() {
               "div",
               { staticClass: "content" },
               [
+                _c("div", {
+                  attrs: { id: "overlap" },
+                  on: { click: _vm.mobileMenuHandler }
+                }),
+                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "content__header" },
@@ -42752,7 +42793,7 @@ var render = function() {
                         staticClass: "mobile-menu",
                         on: { click: _vm.mobileMenuHandler }
                       },
-                      [_c("i", { staticClass: "fas fa-search" })]
+                      [_c("i", { staticClass: "fas fa-bars" })]
                     )
                   ],
                   1
@@ -44001,23 +44042,14 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "sidebar--footer" }, [
-      _c(
-        "div",
-        { staticClass: "sidebar--footer__account" },
-        [
-          _c("span", [_vm._v(_vm._s(_vm.user))]),
-          _vm._v(" "),
-          _c("router-link", { attrs: { to: { name: "profile" } } }, [
-            _c("i", { staticClass: "fas fa-id-card-alt" })
-          ]),
-          _vm._v(" "),
-          _c("i", {
-            staticClass: "fas fa-sign-out-alt",
-            on: { click: _vm.handleLogout }
-          })
-        ],
-        1
-      ),
+      _c("div", { staticClass: "sidebar--footer__account" }, [
+        _c("span", [_vm._v(_vm._s(_vm.user))]),
+        _vm._v(" "),
+        _c("i", {
+          staticClass: "fas fa-sign-out-alt",
+          on: { click: _vm.handleLogout }
+        })
+      ]),
       _vm._v(" "),
       _c(
         "div",

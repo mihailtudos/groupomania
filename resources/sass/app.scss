@@ -79,11 +79,16 @@ p {
     position: fixed!important;
     top: 0;
     bottom: 0;
-    z-index: 100;
+    margin-top: 0!important;
+    padding-top: 2rem;
+    left: -1rem;
+    padding-left: 3rem!important;
+    z-index: 1000;
     display:flex!important;
     background: white;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
 .centered-content {
     padding: 5rem 1rem 1rem 1rem;
     max-width: 700px;

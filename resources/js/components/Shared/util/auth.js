@@ -8,5 +8,4 @@ export function logIn(user) {
 
 export function logOut() {
     localStorage.setItem("isLoggedIn", false);
-    localStorage.removeItem("user");
 }

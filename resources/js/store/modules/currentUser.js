@@ -21,7 +21,6 @@ const actions = {
         if (isLoggedIn()) {
             try {
                 const user = (await axios.get("/user")).data;
-                localStorage.setItem('user', JSON.stringify(user));
                 commit("setUser", user);
                 commit("setLoggedIn", true);
             } catch (error) {

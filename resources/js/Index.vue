@@ -3,11 +3,12 @@
         <div id="app-container" v-if="loggedIn">
             <Sidebar />
             <div class="content">
+                <div id="overlap" @click="mobileMenuHandler"></div>
                 <div class="content__header">
                     <h2>{{ this.$route.name }}</h2>
                     <SearchBar class="search-mobile"/>
                     <span class="mobile-menu" @click="mobileMenuHandler">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-bars"></i>
                 </span>
                 </div>
                 <router-view/>
@@ -34,9 +35,9 @@ export default {
     components: {SearchBar, Widget, Post, Sidebar},
     methods: {
         mobileMenuHandler() {
-            const content = document.querySelector('.content');
+            const overlap = document.querySelector('#overlap');
             const sidebar = document.querySelector('.sidebar');
-            content.classList.toggle('show-menu');
+            overlap.classList.toggle('show-menu');
             sidebar.classList.toggle('show-sidebar');
         }
     },
@@ -77,6 +78,21 @@ $twitter-background: #e6ecf0;
         overflow-y: scroll;
         -ms-overflow-style: none;
         scrollbar-width: none;
+        #overlap {
+            visibility: hidden;
+            &.show-menu {
+                position: fixed;
+                visibility: visible!important;
+                top: 0;
+                bottom: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #4a5568;
+                opacity: .2;
+                z-index: 999;
+            }
+        }
+
         &__header {
             position: sticky;
             top: 0;

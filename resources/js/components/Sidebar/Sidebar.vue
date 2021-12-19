@@ -36,7 +36,6 @@
         <div class="sidebar--footer">
             <div class="sidebar--footer__account">
                 <span>{{ user }}</span>
-                <router-link :to="{ name: 'profile' }"><i class="fas fa-id-card-alt"></i></router-link>
                 <i class="fas fa-sign-out-alt" @click="handleLogout"></i>
             </div>
             <div class="sidebar--footer__links">
@@ -61,12 +60,10 @@ export default {
             this.$store.dispatch('currentUser/logout');
         }
     },
-    // beforeCreate() {
-    //     this.$store.commit('currentUser/setUser', JSON.parse(localStorage.getItem('user')));
-    // },
     computed: {
         user() {
-
+            const user = this.$store.state.currentUser.user;
+            return user.name;
         },
     }
 }

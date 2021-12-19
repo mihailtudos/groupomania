@@ -90,4 +90,26 @@ $twitter-background: #e6ecf0;
         gap: 1rem;
     }
 }
+
+@media (max-width: 400px) {
+    .post {
+        &__body {
+            &--media {
+                width: 100%;
+                img {
+                    height: 100%;
+                    width: 100%;
+                    border-radius: 20px;
+                    object-fit: contain;
+                }
+            }
+        }
+        &__footer {
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+    }
+}
 </style>

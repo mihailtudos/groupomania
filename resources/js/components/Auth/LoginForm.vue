@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {logIn} from "../Shared/util/auth";
+
 export default {
     name: "LoginForm",
     data() {
@@ -47,18 +49,24 @@ export default {
         }
     },
     methods: {
-        handleLogin() {
-            if (!this.isEmailValid(this.formData.email)) {
-                this.formData.errors.email.push('Entered email has an incorrect format');
-            } else {
-                this.formData.errors.email = () => [];
-                if (this.isPasswordValid(this.formData.password)) {
-                    this.formData.errors.password = () => [];
-                    this.$store.dispatch('currentUser/loginUser', this.formData);
-                } else {
-                    this.formData.errors.password.push('Password must be at least 6 characters');
-                }
+        async handleLogin() {
+
+            this.loading = true;
+            this.errors = null;
+
+            try {
+                await axios.get("/sanctum/csrf-cookie");
+                await axios.post("/login", this.formData);
+                logIn();
+                // await this.$store.commit('currentUser/setUser', user);
+                await this.$store.dispatch("currentUser/loadUser");
+                console.log('hit')
+                window.location.href('/');
+                window.location.go();
+            } catch (error) {
+                this.errors = error.response && error.response.data.errors;
             }
+            this.loading = false;
         },
     },
 }
