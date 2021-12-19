@@ -2694,6 +2694,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['title', 'video', 'modalHandler'],
   methods: {
     hideModal: function hideModal() {
+      console.log('sss');
       this.$emit('closeModal');
     }
   },
@@ -2719,6 +2720,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2885,15 +2907,14 @@ __webpack_require__.r(__webpack_exports__);
       show: false
     };
   },
-  props: {
-    modalHandler: {
-      type: Function,
-      required: true
-    }
-  },
   methods: {
     hideModal: function hideModal() {
-      this.show = !this.show;
+      console.log('close');
+      this.show = false;
+    },
+    showModal: function showModal() {
+      console.log('show');
+      this.show = true;
     }
   }
 });
@@ -2993,7 +3014,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Shared_TweetButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/TweetButton */ "./resources/js/components/Shared/TweetButton.vue");
-//
 //
 //
 //
@@ -8233,7 +8253,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n}\n.post-container[data-v-d2e5ef7c] {\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: center;\n  gap: 1rem;\n}\n@media (max-width: 400px) {\n.post__body--media[data-v-d2e5ef7c] {\n    width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n    height: 100%;\n    width: 100%;\n    border-radius: 20px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n    padding: 1rem;\n    display: flex;\n    justify-content: center;\n    gap: 1rem;\n}\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n  border-bottom: 2px solid #e6ecf0;\n}\n.post-container[data-v-d2e5ef7c] {\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 1rem;\n}\n.post__footer--item[data-v-d2e5ef7c] {\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.3rem;\n  font-size: 0.8rem;\n}\n@media (max-width: 400px) {\n.post__body--media[data-v-d2e5ef7c] {\n    width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n    height: 100%;\n    width: 100%;\n    border-radius: 20px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n    padding: 1rem;\n    display: flex;\n    justify-content: center;\n    gap: 1rem;\n}\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8449,7 +8469,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -43586,7 +43606,7 @@ var render = function() {
                           "button",
                           {
                             staticClass: "btn-primary",
-                            on: { click: _vm.modalHandler }
+                            on: { click: _vm.hideModal }
                           },
                           [_vm._v("Close")]
                         )
@@ -43630,14 +43650,67 @@ var render = function() {
   return _c("div", { staticClass: "post" }, [
     _c("div", { staticClass: "post-container" }, [
       _c("div", { staticClass: "post--header" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "post--header__author" }, [
+          _c("h2", [
+            _vm._v(_vm._s(_vm.item.user.name) + " "),
+            _c("span", [_vm._v("@somethgoth")])
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "post__header--description" }, [
-          _c("p", [_vm._v(_vm._s(_vm.item.excerpt))])
+          _vm.item.excerpt.length <= 100
+            ? _c("p", [_vm._v(_vm._s(_vm.item.excerpt))])
+            : _c(
+                "p",
+                [
+                  _vm._v(_vm._s(_vm.item.excerpt.slice(0, 100) + "...") + " "),
+                  _c(
+                    "router-link",
+                    {
+                      staticStyle: { color: "#50b7f5" },
+                      attrs: { to: { name: "home" } }
+                    },
+                    [_vm._v("read more")]
+                  )
+                ],
+                1
+              )
         ])
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _c("div", { staticClass: "post__body" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "post__footer" }, [
+          _c("div", { staticClass: "post__footer--item" }, [
+            _c("span", { staticClass: "material-icons" }, [
+               false ? 0 : _vm._e()
+            ]),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _c("span", [
+              _vm._v(
+                "\n                        " +
+                  _vm._s(_vm.item.likes) +
+                  "\n                    "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: " post__footer--item" }, [
+            _c("span", { staticClass: "material-icons" }, [
+               false ? 0 : _vm._e()
+            ]),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.dislikes))])
+          ]),
+          _vm._v(" "),
+          _vm._m(3)
+        ])
+      ])
     ])
   ])
 }
@@ -43646,39 +43719,41 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "post--header__author" }, [
-      _c("h2", [_vm._v("Somanth Coutne "), _c("span", [_vm._v("@somethgoth")])])
+    return _c("div", { staticClass: "post__body--media" }, [
+      _c("img", {
+        attrs: {
+          width: "400px",
+          height: "100%",
+          src: "/images/post-default.webp",
+          alt: "test"
+        }
+      })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "post__body" }, [
-      _c("div", { staticClass: "post__body--media" }, [
-        _c("img", {
-          attrs: {
-            width: "400px",
-            height: "100%",
-            src: "/images/post-default.webp",
-            alt: "test"
-          }
-        })
-      ]),
+    return _c("span", { staticClass: "material-icons" }, [
+      _c("i", { staticClass: "far fa-thumbs-up" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "material-icons" }, [
+      _c("i", { staticClass: "far fa-thumbs-down" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "post__footer--item" }, [
+      _c("span", { staticClass: "material-icons" }, [_vm._v("comment ")]),
       _vm._v(" "),
-      _c("div", { staticClass: "post__footer" }, [
-        _c("span", { staticClass: "material-icons" }, [
-          _c("i", { staticClass: "fas fa-retweet" })
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "material-icons" }, [
-          _c("i", { staticClass: "far fa-heart" })
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "material-icons" }, [
-          _c("i", { staticClass: "fas fa-upload" })
-        ])
-      ])
+      _c("span", [_vm._v("comment")])
     ])
   }
 ]
@@ -43838,14 +43913,14 @@ var render = function() {
         "button",
         {
           staticClass: "sidebar__tweet btn-primary",
-          on: { click: _vm.modalHandler }
+          on: { click: _vm.showModal }
         },
         [_c("i", { staticClass: "fas fa-feather-alt" }), _vm._v(" Tweet\n    ")]
       ),
       _vm._v(" "),
       _c(
         "Modal",
-        { attrs: { modalHandler: _vm.modalHandler, title: "New tweet" } },
+        { attrs: { title: "New tweet" }, on: { closeModal: _vm.hideModal } },
         [_c("TweetForm")],
         1
       )
@@ -44034,9 +44109,7 @@ var render = function() {
         _vm._v(" "),
         _vm._m(1),
         _vm._v(" "),
-        _vm._m(2),
-        _vm._v(" "),
-        _c("TweetButton", { style: "width: 100%" })
+        _vm._m(2)
       ],
       1
     ),

@@ -31,7 +31,6 @@
                 </span>
                 <h2>Profile</h2>
             </div>
-            <TweetButton :style="'width: 100%'" />
         </div>
         <div class="sidebar--footer">
             <div class="sidebar--footer__account">

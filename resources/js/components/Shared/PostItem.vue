@@ -3,10 +3,11 @@
         <div class="post-container">
             <div class="post--header">
                 <div class="post--header__author">
-                    <h2>Somanth Coutne <span>@somethgoth</span></h2>
+                    <h2>{{ item.user.name }} <span>@somethgoth</span></h2>
                 </div>
                 <div class="post__header--description">
-                    <p>{{ item.excerpt }}</p>
+                    <p v-if=" item.excerpt.length <= 100">{{ item.excerpt }}</p>
+                    <p  v-else>{{ item.excerpt.slice(0, 100) + '...' }} <router-link :to="{name: 'home'}" style="color: #50b7f5;">read more</router-link></p>
                 </div>
             </div>
             <div class="post__body">
@@ -14,9 +15,29 @@
                     <img width="400px" height="100%" src="/images/post-default.webp" alt="test">
                 </div>
                 <div class="post__footer">
-                    <span class="material-icons"><i class="fas fa-retweet"></i></span>
-                    <span class="material-icons"><i class="far fa-heart"></i></span>
-                    <span class="material-icons"><i class="fas fa-upload"></i></span>
+                    <div class="post__footer--item">
+                        <span class="material-icons">
+                            <i class="fas fa-thumbs-up" v-if="0"></i>
+                        </span>
+                        <span class="material-icons">
+                            <i class="far fa-thumbs-up"></i>
+                        </span>
+                        <span>
+                            {{ item.likes }}
+                        </span>
+                    </div>
+                    <div class=" post__footer--item">
+                        <span class="material-icons">
+                            <i class="fas fa-thumbs-down" v-if="0"></i>
+                        </span>
+                        <span class="material-icons">
+                            <i class="far fa-thumbs-down"></i>
+                        </span>
+                        <span>{{ item.dislikes }}</span>
+                    </div>
+                    <div class="post__footer--item">
+                        <span class="material-icons">comment </span> <span>comment</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,6 +67,7 @@ $twitter-background: #e6ecf0;
     align-items: baseline;
     flex-direction: column;
     margin: auto;
+    border-bottom: 2px solid $twitter-background;
     &-container {
         max-width: 400px;
         margin: auto;
@@ -86,8 +108,17 @@ $twitter-background: #e6ecf0;
     &__footer {
         padding: 1rem;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
+        align-items: center;
         gap: 1rem;
+        &--item {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+            font-size: .8rem;
+        }
     }
 }
 

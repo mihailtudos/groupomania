@@ -7,7 +7,7 @@
                         <p class="modal--title">{{ title }}</p>
                         <slot class="model--content"></slot>
                         <div class="modal--controls">
-                            <button class="btn-primary" @click="modalHandler">Close</button>
+                            <button class="btn-primary" @click="hideModal">Close</button>
                         </div>
                     </div>
                 </transition>
@@ -22,6 +22,7 @@ export default {
     props: ['title', 'video', 'modalHandler'],
     methods: {
         hideModal() {
+            console.log('sss')
             this.$emit('closeModal');
         }
     },

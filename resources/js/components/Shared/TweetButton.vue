@@ -1,10 +1,10 @@
 <template>
     <div>
-        <button class="sidebar__tweet btn-primary" @click="modalHandler">
+        <button class="sidebar__tweet btn-primary" @click="showModal">
             <i class="fas fa-feather-alt"></i> Tweet
         </button>
-        <Modal :modalHandler="modalHandler" :title="'New tweet'">
-            <TweetForm />
+        <Modal @closeModal="hideModal" :title="'New tweet'">
+            <TweetForm/>
         </Modal>
     </div>
 </template>
@@ -21,15 +21,14 @@ export default {
             show: false,
         }
     },
-    props: {
-        modalHandler: {
-            type: Function,
-            required: true
-        }
-    },
     methods: {
         hideModal() {
-            this.show = !this.show;
+            console.log('close')
+            this.show = false;
+        },
+        showModal() {
+            console.log('show')
+            this.show = true;
         }
     }
 }
