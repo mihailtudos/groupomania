@@ -11,6 +11,7 @@
                            name="email"
                            autocomplete="email"
                            :class="[{'is-invalid': errorFor('email')}]"
+                           required
                            autofocus>
                     <v-error :errors="errorFor('email')" />
                 </div>
@@ -21,6 +22,7 @@
                         v-model="formData.password"
                         type="password"
                         class="form-control"
+                        required
                         autocomplete="email"
                         :class="[{'is-invalid': errorFor('password')}]"
                         name="password" >
@@ -57,6 +59,7 @@ export default {
     data() {
         return {
             loading: false,
+            errors: {},
             formData: {
                 email: '',
                 password: '',
@@ -66,31 +69,25 @@ export default {
     methods: {
         async handleLogin() {
             this.loading = true;
-            this.errors = null;
-
+            this.errors = {};
             try {
                 await axios.get("/sanctum/csrf-cookie");
-                await axios.post("/login", this.formData);
-                logIn();
-                // await this.$store.commit('currentUser/setUser', user);
-                await this.$store.dispatch("currentUser/loadUser");
-                await this.$router.push({ name: "home" });
+                if (!this.isEmailValid(this.formData.email)) {
+                    this.errors.email.push('Entered email has an incorrect format');
+                } else {
+                    if (this.isPasswordValid(this.formData.password)) {
+                        await axios.post("/login", this.formData);
+                        logIn();
+                        await this.$store.dispatch("currentUser/loadUser");
+                        await this.$router.push({ name: "home" });
+                    } else {
+                        this.errors.password.push('Password must be at least 6 characters');
+                    }
+                }
             } catch (error) {
                 this.errors = error.response && error.response.data.errors;
             }
             this.loading = false;
-
-            // if (!this.isEmailValid(this.formData.email)) {
-            //     this.formData.errors.email.push('Entered email has an incorrect format');
-            // } else {
-            //     this.formData.errors.email = () => [];
-            //     if (this.isPasswordValid(this.formData.password)) {
-            //         this.formData.errors.password = () => [];
-            //
-            //     } else {
-            //         this.formData.errors.password.push('Password must be at least 6 characters');
-            //     }
-            // }
         },
     },
 }
@@ -116,6 +113,7 @@ export default {
                     width: 100%;
                     padding: .5rem .2rem;
                     font-size: 1rem;
+                    border-radius: 5px;
                     &.is-invalid {
                         border-color: red;
                     }

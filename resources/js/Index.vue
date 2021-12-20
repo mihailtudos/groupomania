@@ -29,6 +29,7 @@ import Post from "./components/Shared/PostItem";
 import Widget from "./components/Widget/Widget";
 import SearchBar from "./components/Shared/SearchBar";
 import { mapState, mapGetters } from "vuex";
+import {logOut} from "./components/Shared/util/auth";
 
 export default {
     name: "Index",

@@ -23,7 +23,7 @@
                             <i class="far fa-thumbs-up"></i>
                         </span>
                         <span>
-                            {{ item.likes }}
+                            {{ item.likes.length }}
                         </span>
                     </div>
                     <div class=" post__footer--item">
@@ -33,7 +33,7 @@
                         <span class="material-icons">
                             <i class="far fa-thumbs-down"></i>
                         </span>
-                        <span>{{ item.dislikes }}</span>
+                        <span>{{ item.dislikes.length }}</span>
                     </div>
                     <div class="post__footer--item">
                         <span class="material-icons">comment </span> <span>comment</span>

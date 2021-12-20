@@ -5,12 +5,17 @@ import Login from "./components/Auth/Login";
 import Policy from "./components/Policy/Policy";
 import Profile from "./components/Profile/Profile";
 import Register from "./components/Auth/Register";
+import {auth, notAuth} from "./components/Shared/util/auth";
 
 const routes = [
     {
         path: "/",
         component: Home,
         name: "home",
+        beforeEnter(to, from, next) {
+            auth(to, from, next);
+        }
+
     },
     {
         path: "/post/:id",
@@ -21,11 +26,17 @@ const routes = [
         path: "/auth/login",
         component: Login,
         name: "login",
+        beforeEnter(to, from, next) {
+            notAuth(to, from, next);
+        }
     },
     {
         path: "/auth/register",
         component: Register,
         name: "register",
+        beforeEnter(to, from, next) {
+           notAuth(to, from, next);
+        }
     },
     {
         path: "/cookies",
@@ -38,10 +49,14 @@ const routes = [
         name: "policy",
     },
     {
-        path: "/user/profile",
+        path: "/user/profile/:id",
         component: Profile,
         name: "profile",
+        beforeEnter(to, from, next) {
+            auth(to, from, next);
+        }
     }
+
 ];
 
 

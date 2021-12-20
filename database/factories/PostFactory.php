@@ -24,6 +24,8 @@ class PostFactory extends Factory
         return [
             'excerpt' => $this->faker->sentence(20),
             'slug' => $this->faker->uuid(),
+            'likes' => json_encode([]),
+            'dislikes' => json_encode([]),
             'user_id' => 1,
         ];
     }

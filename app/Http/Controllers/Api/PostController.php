@@ -16,6 +16,12 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')->latest()->get();
+
+        foreach ($posts as $post) {
+            $post->likes = json_decode($post->likes);
+            $post->dislikes = json_decode($post->dislikes);
+        }
+
         return $posts;
     }
 

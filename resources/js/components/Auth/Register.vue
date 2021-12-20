@@ -1,7 +1,7 @@
 <template>
     <div id="register">
         <div class="register">
-            <form @submit.prevent="handleLogin">
+            <form @submit.prevent="handleRegistration">
                 <div class="form-group">
                     <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                     <input id="name"
@@ -11,7 +11,8 @@
                            name="name"
                            autocomplete="name"
                            :class="[{'is-invalid': errorFor('name')}]"
-                           autofocus>
+                           autofocus
+                           required>
                     <v-error :errors="errorFor('name')" />
                 </div>
                 <div class="form-group">
@@ -23,7 +24,8 @@
                            name="email"
                            autocomplete="email"
                            :class="[{'is-invalid': errorFor('email')}]"
-                           autofocus>
+                           autofocus
+                           required>
                     <v-error :errors="errorFor('email')" />
                 </div>
                 <div class="form-group">
@@ -33,24 +35,26 @@
                         v-model="formData.password"
                         type="password"
                         class="form-control"
-                        autocomplete="email"
                         :class="[{'is-invalid': errorFor('password')}]"
-                        name="password" >
+                        name="password"
+                        required
+                        autocomplete>
                     <v-error :errors="errorFor('password')" />
                 </div>
                 <div class="form-group">
-                    <label for="confirm_password" class="col-md-4 col-form-label text-md-right"> Re-type password </label>
+                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-right"> Re-type password </label>
                     <input
-                        id="confirm_password"
-                        v-model="formData.confirm_password"
+                        id="password_confirmation"
+                        v-model="formData.password_confirmation"
                         type="password"
                         class="form-control"
-                        :class="[{'is-invalid': errorFor('confirm_password')}]"
-                        name="confirm_password" >
-                    <v-error :errors="errorFor('confirm_password')" />
+                        :class="[{'is-invalid': errorFor('password_confirmation')}]"
+                        name="password_confirmation"
+                        required>
+                    <v-error :errors="errorFor('password_confirmation')" />
                 </div>
                 <div class="register--button">
-                    <button style="width: 100%"  type="submit" class="btn btn-primary" >Login</button>
+                    <button style="width: 100%"  type="submit" class="btn btn-primary">Register</button>
                 </div>
                 <hr />
                 <div>
@@ -72,42 +76,45 @@ export default {
     data() {
         return {
             loading: false,
+            errors: {},
             formData: {
+                name: '',
                 email: '',
                 password: '',
-                confirm_password: '',
-                name: ''
+                password_confirmation: '',
             }
         }
     },
     methods: {
-        async handleLogin() {
+        async handleRegistration() {
             this.loading = true;
-            this.errors = null;
-
+            this.errors = {};
             try {
-                await axios.get("/sanctum/csrf-cookie");
-                await axios.post("/login", this.formData);
-                logIn();
-                // await this.$store.commit('currentUser/setUser', user);
-                await this.$store.dispatch("currentUser/loadUser");
-                await this.$router.push({ name: "home" });
+                if (this.formData.name.length < 3) {
+                    this.errors.name = [];
+                    this.errors.name.push('Entered name is incorrect');
+                } else if (!this.isEmailValid(this.formData.email)){
+                    this.errors.email = [];
+                    this.errors.email.push('Entered email has an incorrect format');
+                } else if (!this.isPasswordValid(this.formData.password)) {
+                    this.errors.password = [];
+                    this.errors.password.push('Entered password is too short');
+                } else if (this.formData.password !== this.formData.password_confirmation ) {
+                    this.errors.password_confirmation = [];
+                    this.errors.password_confirmation.push('Entered passwords do not match');
+                } else {
+                    const response = await axios.post("/register", this.formData);
+                    console.log(response.status)
+                    if (201 === response.status) {
+                        logIn();
+                        await this.$store.dispatch("currentUser/loadUser");
+                        await this.$router.push({ name: "home" });
+                    }
+                }
             } catch (error) {
                 this.errors = error.response && error.response.data.errors;
             }
             this.loading = false;
-
-            // if (!this.isEmailValid(this.formData.email)) {
-            //     this.formData.errors.email.push('Entered email has an incorrect format');
-            // } else {
-            //     this.formData.errors.email = () => [];
-            //     if (this.isPasswordValid(this.formData.password)) {
-            //         this.formData.errors.password = () => [];
-            //
-            //     } else {
-            //         this.formData.errors.password.push('Password must be at least 6 characters');
-            //     }
-            // }
         },
     },
 }
@@ -133,6 +140,7 @@ export default {
                     padding: .5rem .2rem;
                     border: 2px solid #1a202c;
                     font-size: 1rem;
+                    border-radius: 5px;
                     &.is-invalid {
                         border-color: red;
                     }

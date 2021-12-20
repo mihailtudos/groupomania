@@ -25,16 +25,16 @@
                 </span>
                 <h2>Messages</h2>
             </div>
-            <div class="sidebar--option">
+            <router-link :to="{ name: 'profile', params: {id: user.id } }" class="sidebar--option">
                 <span class="material-icons">
                     <i class="fas fa-id-badge"></i>
                 </span>
                 <h2>Profile</h2>
-            </div>
+            </router-link>
         </div>
         <div class="sidebar--footer">
             <div class="sidebar--footer__account">
-                <span>{{ user }}</span>
+                <span>{{ user.name }}</span>
                 <i class="fas fa-sign-out-alt" @click="handleLogout"></i>
             </div>
             <div class="sidebar--footer__links">
@@ -61,8 +61,7 @@ export default {
     },
     computed: {
         user() {
-            const user = this.$store.state.currentUser.user;
-            return user.name;
+            return this.$store.state.currentUser.user;
         },
     }
 }

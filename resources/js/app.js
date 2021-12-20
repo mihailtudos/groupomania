@@ -14,11 +14,12 @@ import store from './store/index';
 
 Vue.mixin({
     methods: {
-        capitalizeFirstLetter: str => str.charAt(0).toUpperCase() + str.slice(1),
-        isEmailValid: email => {
-            return email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        capitalizeFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+        isEmailValid: (email) => {
+            const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return regex.test(email);
         },
-        isPasswordValid: password => {
+        isPasswordValid: (password) => {
             return password.length >= 6;
         }
     }

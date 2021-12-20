@@ -2080,7 +2080,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Shared_PostItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Shared/PostItem */ "./resources/js/components/Shared/PostItem.vue");
 /* harmony import */ var _components_Widget_Widget__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Widget/Widget */ "./resources/js/components/Widget/Widget.vue");
 /* harmony import */ var _components_Shared_SearchBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Shared/SearchBar */ "./resources/js/components/Shared/SearchBar.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Shared/util/auth */ "./resources/js/components/Shared/util/auth.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2117,6 +2118,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Index",
   components: {
@@ -2133,9 +2135,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       sidebar.classList.toggle('show-sidebar');
     }
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)({
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)({
     user: "currentUser/user"
-  })), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)({
+  })), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapState)({
     'isLoggedIn': 'currentUser/user'
   })), {}, {
     loggedIn: {
@@ -2218,6 +2220,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2226,6 +2230,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       loading: false,
+      errors: {},
       formData: {
         email: '',
         password: ''
@@ -2242,55 +2247,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _this.loading = true;
-                _this.errors = null;
+                _this.errors = {};
                 _context.prev = 2;
                 _context.next = 5;
                 return axios.get("/sanctum/csrf-cookie");
 
               case 5:
-                _context.next = 7;
+                if (_this.isEmailValid(_this.formData.email)) {
+                  _context.next = 9;
+                  break;
+                }
+
+                _this.errors.email.push('Entered email has an incorrect format');
+
+                _context.next = 20;
+                break;
+
+              case 9:
+                if (!_this.isPasswordValid(_this.formData.password)) {
+                  _context.next = 19;
+                  break;
+                }
+
+                _context.next = 12;
                 return axios.post("/login", _this.formData);
 
-              case 7:
-                (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_2__.logIn)(); // await this.$store.commit('currentUser/setUser', user);
-
-                _context.next = 10;
+              case 12:
+                (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_2__.logIn)();
+                _context.next = 15;
                 return _this.$store.dispatch("currentUser/loadUser");
 
-              case 10:
-                _context.next = 12;
+              case 15:
+                _context.next = 17;
                 return _this.$router.push({
                   name: "home"
                 });
 
-              case 12:
-                _context.next = 17;
+              case 17:
+                _context.next = 20;
                 break;
 
-              case 14:
-                _context.prev = 14;
+              case 19:
+                _this.errors.password.push('Password must be at least 6 characters');
+
+              case 20:
+                _context.next = 25;
+                break;
+
+              case 22:
+                _context.prev = 22;
                 _context.t0 = _context["catch"](2);
                 _this.errors = _context.t0.response && _context.t0.response.data.errors;
 
-              case 17:
-                _this.loading = false; // if (!this.isEmailValid(this.formData.email)) {
-                //     this.formData.errors.email.push('Entered email has an incorrect format');
-                // } else {
-                //     this.formData.errors.email = () => [];
-                //     if (this.isPasswordValid(this.formData.password)) {
-                //         this.formData.errors.password = () => [];
-                //
-                //     } else {
-                //         this.formData.errors.password.push('Password must be at least 6 characters');
-                //     }
-                // }
+              case 25:
+                _this.loading = false;
 
-              case 18:
+              case 26:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[2, 14]]);
+        }, _callee, null, [[2, 22]]);
       }))();
     }
   }
@@ -2504,6 +2521,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2512,73 +2533,121 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       loading: false,
+      errors: {},
       formData: {
+        name: '',
         email: '',
         password: '',
-        confirm_password: '',
-        name: ''
+        password_confirmation: ''
       }
     };
   },
   methods: {
-    handleLogin: function handleLogin() {
+    handleRegistration: function handleRegistration() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.loading = true;
-                _this.errors = null;
+                _this.errors = {};
                 _context.prev = 2;
-                _context.next = 5;
-                return axios.get("/sanctum/csrf-cookie");
 
-              case 5:
-                _context.next = 7;
-                return axios.post("/login", _this.formData);
+                if (!(_this.formData.name.length < 3)) {
+                  _context.next = 8;
+                  break;
+                }
 
-              case 7:
-                (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_2__.logIn)(); // await this.$store.commit('currentUser/setUser', user);
+                _this.errors.name = [];
 
-                _context.next = 10;
+                _this.errors.name.push('Entered name is incorrect');
+
+                _context.next = 33;
+                break;
+
+              case 8:
+                if (_this.isEmailValid(_this.formData.email)) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _this.errors.email = [];
+
+                _this.errors.email.push('Entered email has an incorrect format');
+
+                _context.next = 33;
+                break;
+
+              case 13:
+                if (_this.isPasswordValid(_this.formData.password)) {
+                  _context.next = 18;
+                  break;
+                }
+
+                _this.errors.password = [];
+
+                _this.errors.password.push('Entered password is too short');
+
+                _context.next = 33;
+                break;
+
+              case 18:
+                if (!(_this.formData.password !== _this.formData.password_confirmation)) {
+                  _context.next = 23;
+                  break;
+                }
+
+                _this.errors.password_confirmation = [];
+
+                _this.errors.password_confirmation.push('Entered passwords do not match');
+
+                _context.next = 33;
+                break;
+
+              case 23:
+                _context.next = 25;
+                return axios.post("/register", _this.formData);
+
+              case 25:
+                response = _context.sent;
+                console.log(response.status);
+
+                if (!(201 === response.status)) {
+                  _context.next = 33;
+                  break;
+                }
+
+                (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_2__.logIn)();
+                _context.next = 31;
                 return _this.$store.dispatch("currentUser/loadUser");
 
-              case 10:
-                _context.next = 12;
+              case 31:
+                _context.next = 33;
                 return _this.$router.push({
                   name: "home"
                 });
 
-              case 12:
-                _context.next = 17;
+              case 33:
+                _context.next = 38;
                 break;
 
-              case 14:
-                _context.prev = 14;
+              case 35:
+                _context.prev = 35;
                 _context.t0 = _context["catch"](2);
                 _this.errors = _context.t0.response && _context.t0.response.data.errors;
 
-              case 17:
-                _this.loading = false; // if (!this.isEmailValid(this.formData.email)) {
-                //     this.formData.errors.email.push('Entered email has an incorrect format');
-                // } else {
-                //     this.formData.errors.email = () => [];
-                //     if (this.isPasswordValid(this.formData.password)) {
-                //         this.formData.errors.password = () => [];
-                //
-                //     } else {
-                //         this.formData.errors.password.push('Password must be at least 6 characters');
-                //     }
-                // }
+              case 38:
+                _this.loading = false;
 
-              case 18:
+              case 39:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[2, 14]]);
+        }, _callee, null, [[2, 35]]);
       }))();
     }
   }
@@ -3078,8 +3147,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     user: function user() {
-      var user = this.$store.state.currentUser.user;
-      return user.name;
+      return this.$store.state.currentUser.user;
     }
   }
 });
@@ -3297,7 +3365,8 @@ Vue.mixin({
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
     isEmailValid: function isEmailValid(email) {
-      return email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+      var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      return regex.test(email);
     },
     isPasswordValid: function isPasswordValid(password) {
       return password.length >= 6;
@@ -3420,16 +3489,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "isLoggedIn": () => (/* binding */ isLoggedIn),
 /* harmony export */   "logIn": () => (/* binding */ logIn),
-/* harmony export */   "logOut": () => (/* binding */ logOut)
+/* harmony export */   "logOut": () => (/* binding */ logOut),
+/* harmony export */   "notAuth": () => (/* binding */ notAuth),
+/* harmony export */   "auth": () => (/* binding */ auth)
 /* harmony export */ });
 function isLoggedIn() {
   return localStorage.getItem("isLoggedIn") == 'true';
 }
-function logIn(user) {
+function logIn() {
   localStorage.setItem("isLoggedIn", true);
 }
 function logOut() {
   localStorage.setItem("isLoggedIn", false);
+}
+function notAuth(to, from, next) {
+  try {
+    if (!isLoggedIn()) {
+      next();
+    } else {
+      next({
+        name: "home" // back to safety route //
+
+      });
+    }
+  } catch (e) {
+    next({
+      name: "home" // back to safety route //
+
+    });
+  }
+}
+function auth(to, from, next) {
+  try {
+    if (isLoggedIn()) {
+      next();
+    } else {
+      next({
+        name: "login" // back to safety route //
+
+      });
+    }
+  } catch (e) {
+    next({
+      name: "login" // back to safety route //
+
+    });
+  }
 }
 
 /***/ }),
@@ -3445,13 +3550,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _views_home_Home__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./views/home/Home */ "./resources/js/views/home/Home.vue");
 /* harmony import */ var _views_post_Post__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./views/post/Post */ "./resources/js/views/post/Post.vue");
 /* harmony import */ var _components_Auth_Login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Auth/Login */ "./resources/js/components/Auth/Login.vue");
 /* harmony import */ var _components_Policy_Policy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Policy/Policy */ "./resources/js/components/Policy/Policy.vue");
 /* harmony import */ var _components_Profile_Profile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Profile/Profile */ "./resources/js/components/Profile/Profile.vue");
 /* harmony import */ var _components_Auth_Register__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Auth/Register */ "./resources/js/components/Auth/Register.vue");
+/* harmony import */ var _components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Shared/util/auth */ "./resources/js/components/Shared/util/auth.js");
+
 
 
 
@@ -3462,7 +3569,10 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [{
   path: "/",
   component: _views_home_Home__WEBPACK_IMPORTED_MODULE_0__["default"],
-  name: "home"
+  name: "home",
+  beforeEnter: function beforeEnter(to, from, next) {
+    (0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_6__.auth)(to, from, next);
+  }
 }, {
   path: "/post/:id",
   component: _views_post_Post__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -3470,11 +3580,17 @@ var routes = [{
 }, {
   path: "/auth/login",
   component: _components_Auth_Login__WEBPACK_IMPORTED_MODULE_2__["default"],
-  name: "login"
+  name: "login",
+  beforeEnter: function beforeEnter(to, from, next) {
+    (0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_6__.notAuth)(to, from, next);
+  }
 }, {
   path: "/auth/register",
   component: _components_Auth_Register__WEBPACK_IMPORTED_MODULE_5__["default"],
-  name: "register"
+  name: "register",
+  beforeEnter: function beforeEnter(to, from, next) {
+    (0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_6__.notAuth)(to, from, next);
+  }
 }, {
   path: "/cookies",
   component: _components_Policy_Policy__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -3484,11 +3600,14 @@ var routes = [{
   component: _components_Policy_Policy__WEBPACK_IMPORTED_MODULE_3__["default"],
   name: "policy"
 }, {
-  path: "/user/profile",
+  path: "/user/profile/:id",
   component: _components_Profile_Profile__WEBPACK_IMPORTED_MODULE_4__["default"],
-  name: "profile"
+  name: "profile",
+  beforeEnter: function beforeEnter(to, from, next) {
+    (0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_6__.auth)(to, from, next);
+  }
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]({
   routes: routes,
   mode: 'history'
 });
@@ -3536,8 +3655,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/util/auth */ "./resources/js/components/Shared/util/auth.js");
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
-
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3553,7 +3670,8 @@ var getters = {
   user: function user(state) {
     return {
       email: state.user.email,
-      name: state.user.name
+      name: state.user.name,
+      id: state.user.id
     };
   }
 };
@@ -3601,35 +3719,39 @@ var actions = {
   },
   logout: function logout(_ref2) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _objectDestructuringEmpty(_ref2);
-
+              commit = _ref2.commit;
               _context2.prev = 1;
-              _context2.next = 4;
-              return axios.post('/logout');
-
-            case 4:
               (0,_components_Shared_util_auth__WEBPACK_IMPORTED_MODULE_1__.logOut)();
               window.location.href = '/auth/login';
               window.location.go();
-              _context2.next = 13;
-              break;
-
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](1);
-              _context2.next = 13;
+              _context2.next = 7;
               return axios.post('/logout');
 
-            case 13:
+            case 7:
+              _context2.next = 9;
+              return commit("setLoggedIn", false);
+
+            case 9:
+              _context2.next = 15;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](1);
+              _context2.next = 15;
+              return axios.post('/logout');
+
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 9]]);
+      }, _callee2, null, [[1, 11]]);
     }))();
   }
 };
@@ -8133,7 +8255,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#login[data-v-06688fcd] {\n  display: flex;\n  margin-top: 5rem;\n  justify-content: center;\n}\n#login .login[data-v-06688fcd] {\n  width: 100%;\n  max-width: 400px;\n}\n#login .login form[data-v-06688fcd] {\n  width: 100%;\n}\n#login .login form .form-group[data-v-06688fcd] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#login .login form .form-group input[data-v-06688fcd] {\n  border: 2px solid #1a202c;\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  font-size: 1rem;\n}\n#login .login form .form-group input.is-invalid[data-v-06688fcd] {\n  border-color: red;\n}\n#login .login form button[data-v-06688fcd] {\n  width: 100px;\n}\n#login .login--button[data-v-06688fcd] {\n  display: flex;\n  justify-content: flex-end;\n}\n#login .login--footer a[data-v-06688fcd] {\n  font-weight: bold;\n  color: #50b7f5;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#login[data-v-06688fcd] {\n  display: flex;\n  margin-top: 5rem;\n  justify-content: center;\n}\n#login .login[data-v-06688fcd] {\n  width: 100%;\n  max-width: 400px;\n}\n#login .login form[data-v-06688fcd] {\n  width: 100%;\n}\n#login .login form .form-group[data-v-06688fcd] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#login .login form .form-group input[data-v-06688fcd] {\n  border: 2px solid #1a202c;\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  font-size: 1rem;\n  border-radius: 5px;\n}\n#login .login form .form-group input.is-invalid[data-v-06688fcd] {\n  border-color: red;\n}\n#login .login form button[data-v-06688fcd] {\n  width: 100px;\n}\n#login .login--button[data-v-06688fcd] {\n  display: flex;\n  justify-content: flex-end;\n}\n#login .login--footer a[data-v-06688fcd] {\n  font-weight: bold;\n  color: #50b7f5;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8181,7 +8303,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#register[data-v-ff714c22] {\n  display: flex;\n  margin-top: 5rem;\n  justify-content: center;\n}\n#register .register[data-v-ff714c22] {\n  width: 100%;\n  max-width: 400px;\n}\n#register .register form[data-v-ff714c22] {\n  width: 100%;\n}\n#register .register form .form-group[data-v-ff714c22] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#register .register form .form-group input[data-v-ff714c22] {\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  border: 2px solid #1a202c;\n  font-size: 1rem;\n}\n#register .register form .form-group input.is-invalid[data-v-ff714c22] {\n  border-color: red;\n}\n#register .register form button[data-v-ff714c22] {\n  width: 100px;\n}\n#register .register--button[data-v-ff714c22] {\n  display: flex;\n  justify-content: flex-end;\n}\n#register .register--footer[data-v-ff714c22] {\n  color: #50b7f5;\n  font-weight: bold;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#register[data-v-ff714c22] {\n  display: flex;\n  margin-top: 5rem;\n  justify-content: center;\n}\n#register .register[data-v-ff714c22] {\n  width: 100%;\n  max-width: 400px;\n}\n#register .register form[data-v-ff714c22] {\n  width: 100%;\n}\n#register .register form .form-group[data-v-ff714c22] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#register .register form .form-group input[data-v-ff714c22] {\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  border: 2px solid #1a202c;\n  font-size: 1rem;\n  border-radius: 5px;\n}\n#register .register form .form-group input.is-invalid[data-v-ff714c22] {\n  border-color: red;\n}\n#register .register form button[data-v-ff714c22] {\n  width: 100px;\n}\n#register .register--button[data-v-ff714c22] {\n  display: flex;\n  justify-content: flex-end;\n}\n#register .register--footer[data-v-ff714c22] {\n  color: #50b7f5;\n  font-weight: bold;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -42898,6 +43020,7 @@ var render = function() {
                   type: "email",
                   name: "email",
                   autocomplete: "email",
+                  required: "",
                   autofocus: ""
                 },
                 domProps: { value: _vm.formData.email },
@@ -42943,6 +43066,7 @@ var render = function() {
                 attrs: {
                   id: "password",
                   type: "password",
+                  required: "",
                   autocomplete: "email",
                   name: "password"
                 },
@@ -43232,7 +43356,7 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.handleLogin.apply(null, arguments)
+              return _vm.handleRegistration.apply(null, arguments)
             }
           }
         },
@@ -43266,7 +43390,8 @@ var render = function() {
                   type: "text",
                   name: "name",
                   autocomplete: "name",
-                  autofocus: ""
+                  autofocus: "",
+                  required: ""
                 },
                 domProps: { value: _vm.formData.name },
                 on: {
@@ -43313,7 +43438,8 @@ var render = function() {
                   type: "email",
                   name: "email",
                   autocomplete: "email",
-                  autofocus: ""
+                  autofocus: "",
+                  required: ""
                 },
                 domProps: { value: _vm.formData.email },
                 on: {
@@ -43358,8 +43484,9 @@ var render = function() {
                 attrs: {
                   id: "password",
                   type: "password",
-                  autocomplete: "email",
-                  name: "password"
+                  name: "password",
+                  required: "",
+                  autocomplete: ""
                 },
                 domProps: { value: _vm.formData.password },
                 on: {
@@ -43385,7 +43512,7 @@ var render = function() {
                 "label",
                 {
                   staticClass: "col-md-4 col-form-label text-md-right",
-                  attrs: { for: "confirm_password" }
+                  attrs: { for: "password_confirmation" }
                 },
                 [_vm._v(" Re-type password ")]
               ),
@@ -43395,18 +43522,21 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.formData.confirm_password,
-                    expression: "formData.confirm_password"
+                    value: _vm.formData.password_confirmation,
+                    expression: "formData.password_confirmation"
                   }
                 ],
                 staticClass: "form-control",
-                class: [{ "is-invalid": _vm.errorFor("confirm_password") }],
+                class: [
+                  { "is-invalid": _vm.errorFor("password_confirmation") }
+                ],
                 attrs: {
-                  id: "confirm_password",
+                  id: "password_confirmation",
                   type: "password",
-                  name: "confirm_password"
+                  name: "password_confirmation",
+                  required: ""
                 },
-                domProps: { value: _vm.formData.confirm_password },
+                domProps: { value: _vm.formData.password_confirmation },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
@@ -43414,7 +43544,7 @@ var render = function() {
                     }
                     _vm.$set(
                       _vm.formData,
-                      "confirm_password",
+                      "password_confirmation",
                       $event.target.value
                     )
                   }
@@ -43422,7 +43552,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("v-error", {
-                attrs: { errors: _vm.errorFor("confirm_password") }
+                attrs: { errors: _vm.errorFor("password_confirmation") }
               })
             ],
             1
@@ -43465,7 +43595,7 @@ var staticRenderFns = [
           staticStyle: { width: "100%" },
           attrs: { type: "submit" }
         },
-        [_vm._v("Login")]
+        [_vm._v("Register")]
       )
     ])
   }
@@ -43692,7 +43822,7 @@ var render = function() {
             _c("span", [
               _vm._v(
                 "\n                        " +
-                  _vm._s(_vm.item.likes) +
+                  _vm._s(_vm.item.likes.length) +
                   "\n                    "
               )
             ])
@@ -43705,7 +43835,7 @@ var render = function() {
             _vm._v(" "),
             _vm._m(2),
             _vm._v(" "),
-            _c("span", [_vm._v(_vm._s(_vm.item.dislikes))])
+            _c("span", [_vm._v(_vm._s(_vm.item.dislikes.length))])
           ]),
           _vm._v(" "),
           _vm._m(3)
@@ -44109,14 +44239,27 @@ var render = function() {
         _vm._v(" "),
         _vm._m(1),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "router-link",
+          {
+            staticClass: "sidebar--option",
+            attrs: { to: { name: "profile", params: { id: _vm.user.id } } }
+          },
+          [
+            _c("span", { staticClass: "material-icons" }, [
+              _c("i", { staticClass: "fas fa-id-badge" })
+            ]),
+            _vm._v(" "),
+            _c("h2", [_vm._v("Profile")])
+          ]
+        )
       ],
       1
     ),
     _vm._v(" "),
     _c("div", { staticClass: "sidebar--footer" }, [
       _c("div", { staticClass: "sidebar--footer__account" }, [
-        _c("span", [_vm._v(_vm._s(_vm.user))]),
+        _c("span", [_vm._v(_vm._s(_vm.user.name))]),
         _vm._v(" "),
         _c("i", {
           staticClass: "fas fa-sign-out-alt",
@@ -44158,7 +44301,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(2)
     ])
   ])
 }
@@ -44185,18 +44328,6 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("h2", [_vm._v("Messages")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "sidebar--option" }, [
-      _c("span", { staticClass: "material-icons" }, [
-        _c("i", { staticClass: "fas fa-id-badge" })
-      ]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Profile")])
     ])
   },
   function() {

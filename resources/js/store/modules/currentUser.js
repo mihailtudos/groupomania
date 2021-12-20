@@ -6,10 +6,10 @@ const state = {
 };
 const getters = {
     user: (state) => {
-
         return {
             email: state.user.email,
-            name: state.user.name
+            name: state.user.name,
+            id: state.user.id
         }
     },
 };
@@ -28,12 +28,13 @@ const actions = {
             }
         }
     },
-    async logout({}) {
+    async logout({commit}) {
         try {
-            await axios.post('/logout');
             logOut();
             window.location.href = '/auth/login';
             window.location.go();
+            await axios.post('/logout');
+            await commit("setLoggedIn", false);
         } catch (error) {
             await axios.post('/logout');
         }
