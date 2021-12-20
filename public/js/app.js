@@ -2220,8 +2220,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2249,65 +2247,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.loading = true;
                 _this.errors = {};
                 _context.prev = 2;
-                _context.next = 5;
-                return axios.get("/sanctum/csrf-cookie");
 
-              case 5:
                 if (_this.isEmailValid(_this.formData.email)) {
-                  _context.next = 9;
+                  _context.next = 8;
                   break;
                 }
+
+                _this.errors.email = [];
 
                 _this.errors.email.push('Entered email has an incorrect format');
 
-                _context.next = 20;
+                _context.next = 22;
                 break;
 
-              case 9:
+              case 8:
                 if (!_this.isPasswordValid(_this.formData.password)) {
-                  _context.next = 19;
+                  _context.next = 20;
                   break;
                 }
 
-                _context.next = 12;
+                _context.next = 11;
+                return axios.get("/sanctum/csrf-cookie");
+
+              case 11:
+                _context.next = 13;
                 return axios.post("/login", _this.formData);
 
-              case 12:
+              case 13:
                 (0,_Shared_util_auth__WEBPACK_IMPORTED_MODULE_2__.logIn)();
-                _context.next = 15;
+                _context.next = 16;
                 return _this.$store.dispatch("currentUser/loadUser");
 
-              case 15:
-                _context.next = 17;
+              case 16:
+                _context.next = 18;
                 return _this.$router.push({
                   name: "home"
                 });
 
-              case 17:
-                _context.next = 20;
+              case 18:
+                _context.next = 22;
                 break;
-
-              case 19:
-                _this.errors.password.push('Password must be at least 6 characters');
 
               case 20:
-                _context.next = 25;
-                break;
+                _this.errors.password = [];
+
+                _this.errors.password.push('Password must be at least 6 characters');
 
               case 22:
-                _context.prev = 22;
+                _context.next = 27;
+                break;
+
+              case 24:
+                _context.prev = 24;
                 _context.t0 = _context["catch"](2);
                 _this.errors = _context.t0.response && _context.t0.response.data.errors;
 
-              case 25:
+              case 27:
                 _this.loading = false;
 
-              case 26:
+              case 28:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[2, 22]]);
+        }, _callee, null, [[2, 24]]);
       }))();
     }
   }
@@ -43020,7 +43023,6 @@ var render = function() {
                   type: "email",
                   name: "email",
                   autocomplete: "email",
-                  required: "",
                   autofocus: ""
                 },
                 domProps: { value: _vm.formData.email },
@@ -43066,7 +43068,6 @@ var render = function() {
                 attrs: {
                   id: "password",
                   type: "password",
-                  required: "",
                   autocomplete: "email",
                   name: "password"
                 },

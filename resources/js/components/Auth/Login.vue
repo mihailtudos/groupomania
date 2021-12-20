@@ -11,7 +11,6 @@
                            name="email"
                            autocomplete="email"
                            :class="[{'is-invalid': errorFor('email')}]"
-                           required
                            autofocus>
                     <v-error :errors="errorFor('email')" />
                 </div>
@@ -22,7 +21,6 @@
                         v-model="formData.password"
                         type="password"
                         class="form-control"
-                        required
                         autocomplete="email"
                         :class="[{'is-invalid': errorFor('password')}]"
                         name="password" >
@@ -71,16 +69,18 @@ export default {
             this.loading = true;
             this.errors = {};
             try {
-                await axios.get("/sanctum/csrf-cookie");
                 if (!this.isEmailValid(this.formData.email)) {
+                    this.errors.email = [];
                     this.errors.email.push('Entered email has an incorrect format');
                 } else {
                     if (this.isPasswordValid(this.formData.password)) {
+                        await axios.get("/sanctum/csrf-cookie");
                         await axios.post("/login", this.formData);
                         logIn();
                         await this.$store.dispatch("currentUser/loadUser");
                         await this.$router.push({ name: "home" });
                     } else {
+                        this.errors.password = [];
                         this.errors.password.push('Password must be at least 6 characters');
                     }
                 }
