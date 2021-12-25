@@ -30,6 +30,10 @@ body {
   outline: 0 !important;
 }
 
+.shadow-primary {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
 hr {
   box-sizing: content-box;
   height: 0;

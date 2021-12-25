@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LikesHandler;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,5 +22,6 @@ Route::prefix('user')->group(function () {
 });
 Route::apiResource('/posts', PostController::class)->except('index');
 Route::get('/posts', [PostController::class, 'index']);
+Route::post('/{id}/likes', LikesHandler::class);
 
 

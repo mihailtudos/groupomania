@@ -1,4 +1,5 @@
 import ValidationErrors from "./components/Shared/ValidationErrors";
+import moment from "moment";
 
 require('./bootstrap');
 import router from "./routes";
@@ -21,9 +22,16 @@ Vue.mixin({
         },
         isPasswordValid: (password) => {
             return password.length >= 6;
+        },
+        getUsername(email) {
+            return email.split('@')[0];
         }
     }
 });
+
+Vue.filter('fromNow', (value) => {
+    return moment(value).fromNow();
+})
 
 const app = new Vue({
     el: '#app',

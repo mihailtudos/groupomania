@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user')->latest()->get();
+        $posts = Post::with(['user', 'comments'])->latest()->get();
 
         foreach ($posts as $post) {
             $post->likes = json_decode($post->likes);
@@ -44,11 +44,15 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $post = Post::with(['user', 'comments'])->findOrFail($id);
+        $post->likes = json_decode($post->likes);
+        $post->dislikes = json_decode($post->dislikes);
+
+        return $post;
     }
 
     /**
