@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="comment--content">
-            <p class="comment--content__username">{{ 'Alexander MacQueen' }}</p>
+            <p class="comment--content__username">{{ comment.user.name }}</p>
             <p class="comment--content__date">{{ comment.created_at | fromNow }}</p>
             <p class="comment--content__content">{{ comment.content }}</p>
         </div>
@@ -33,6 +33,7 @@ export default {
     border-radius: 1rem;
     display: flex;
     gap: 1rem;
+    margin-bottom: 1rem;
     &--avatar {
         &__img {
             background: #4dc0b5;

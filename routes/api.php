@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CommentsController;
 use App\Http\Controllers\Api\LikesHandler;
 use App\Http\Controllers\Api\PostController;
 use Illuminate\Http\Request;
@@ -20,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function () {
     Route::get('/current', [\App\Http\Controllers\Api\UserController::class, 'currentUser']);
 });
-Route::apiResource('/posts', PostController::class)->except('index');
-Route::get('/posts', [PostController::class, 'index']);
+Route::apiResource('/posts', PostController::class);
+Route::apiResource('/comments', CommentsController::class)->except('index');
+Route::get('/posts/{id}/comments', [PostController::class, 'comments']);
 Route::post('/{id}/likes', LikesHandler::class);
 
 

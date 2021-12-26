@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -76,5 +77,11 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function comments($id): \Illuminate\Http\JsonResponse
+    {
+        $comments = Comment::with('user')->where('post_id', $id)->get();
+        return response()->json(['comments' => $comments]);
     }
 }

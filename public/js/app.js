@@ -2761,13 +2761,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Modal",
   props: ['title', 'video', 'modalHandler'],
   methods: {
     hideModal: function hideModal() {
-      console.log('sss');
       this.$emit('closeModal');
+    },
+    createHandler: function createHandler() {
+      this.$emit('create');
     }
   },
   mounted: function mounted() {
@@ -3059,14 +3062,17 @@ __webpack_require__.r(__webpack_exports__);
       show: false
     };
   },
+  props: ['title'],
   methods: {
     hideModal: function hideModal() {
-      console.log('close');
       this.show = false;
+      this.$emit('closeModal');
     },
     showModal: function showModal() {
-      console.log('show');
       this.show = true;
+    },
+    handleCreate: function handleCreate() {
+      this.$emit('create');
     }
   }
 });
@@ -3516,8 +3522,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
-/* harmony import */ var _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/UI/CommentItem */ "./resources/js/components/UI/CommentItem.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
+/* harmony import */ var _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/UI/CommentItem */ "./resources/js/components/UI/CommentItem.vue");
+/* harmony import */ var _components_Shared_TweetButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/TweetButton */ "./resources/js/components/Shared/TweetButton.vue");
+/* harmony import */ var _components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Shared/mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -3538,42 +3554,169 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Post",
+  mixins: [_components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_4__["default"]],
   components: {
-    CommentItem: _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_1__["default"],
-    LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_0__["default"]
+    TweetButton: _components_Shared_TweetButton__WEBPACK_IMPORTED_MODULE_3__["default"],
+    CommentItem: _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_2__["default"],
+    LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       post: null,
+      comments: null,
       loading: false,
-      error: false
+      errors: {},
+      comment: '',
+      loadingComments: false,
+      errorLoadingComments: false,
+      commentsSize: 10
     };
   },
   created: function created() {
     var _this = this;
 
-    if (this.$route.params.post) {
-      this.post = this.$route.params.post;
-    } else {
-      this.loading = true;
-      this.error = false;
-      axios.get("/api/posts/".concat(this.$route.params.id)).then(function (response) {
-        return _this.post = response.data;
-      })["catch"](function (e) {
-        return _this.error = true;
-      }).then(function () {
-        return _this.loading = false;
-      });
-    }
+    this.loading = true;
+    this.errors = {};
+    axios.get("/api/posts/".concat(this.$route.params.id)).then(function (response) {
+      _this.post = response.data;
+
+      _this.loadComments();
+    })["catch"](function (error) {
+      return _this.errors = error.response && error.response.data.errors;
+    }).then(function () {
+      return _this.loading = false;
+    });
   },
   mounted: function mounted() {
     if (this.$router.currentRoute['hash']) {
       Vue.use(VueScrollTo);
       VueScrollTo.scrollTo(this.$router.currentRoute['hash'], 500);
+    }
+  },
+  methods: {
+    handleCloseModal: function handleCloseModal() {
+      this.loading = false;
+      this.errors = {};
+      this.comment = '';
+    },
+    handleCreate: function handleCreate() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var comment;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this2.errors = {};
+
+                if (!(_this2.comment.length > 5)) {
+                  _context.next = 14;
+                  break;
+                }
+
+                _context.prev = 2;
+                _context.next = 5;
+                return axios.post('/api/comments', {
+                  post_id: _this2.post.id,
+                  user_id: _this2.$store.state.currentUser.user.id,
+                  content: _this2.comment
+                });
+
+              case 5:
+                comment = _context.sent.data.comment;
+
+                _this2.updateComments(comment);
+
+                _context.next = 12;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](2);
+                _this2.errors = _context.t0.response && _context.t0.response.data.errors;
+
+              case 12:
+                _context.next = 15;
+                break;
+
+              case 14:
+                _this2.errors.content = ["The content must be at least 5 characters."];
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[2, 9]]);
+      }))();
+    },
+    updateComments: function updateComments(comment) {
+      this.comments.push(comment);
+      this.commentsSize = this.comments.length;
+      this.handleCloseModal();
+      document.getElementById('closeModal').click();
+    },
+    loadComments: function loadComments() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this3.loadingComments = true;
+                _this3.errorLoadingComments = false;
+                _context2.prev = 2;
+                _context2.next = 5;
+                return axios.get("/api/posts/".concat(_this3.post.id, "/comments"));
+
+              case 5:
+                _this3.comments = _context2.sent.data.comments;
+                _this3.loadingComments = false;
+                _context2.next = 12;
+                break;
+
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](2);
+                _this3.errorLoadingComments = true;
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[2, 9]]);
+      }))();
     }
   }
 });
@@ -8806,7 +8949,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".comment[data-v-43427afc] {\n  padding: 1rem;\n  border-radius: 1rem;\n  display: flex;\n  gap: 1rem;\n}\n.comment--avatar__img[data-v-43427afc] {\n  background: #4dc0b5;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--avatar__img img[data-v-43427afc] {\n  -o-object-fit: cover;\n     object-fit: cover;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--content[data-v-43427afc] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n}\n.comment--content p[data-v-43427afc] {\n  margin: 0;\n  padding: 0;\n}\n.comment--content__username[data-v-43427afc] {\n  font-weight: bold;\n}\n.comment--content__date[data-v-43427afc] {\n  margin-bottom: 1rem !important;\n  font-weight: 400;\n  color: gray;\n}\n.comment--content__content[data-v-43427afc] {\n  font-weight: 200;\n  color: black;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".comment[data-v-43427afc] {\n  padding: 1rem;\n  border-radius: 1rem;\n  display: flex;\n  gap: 1rem;\n  margin-bottom: 1rem;\n}\n.comment--avatar__img[data-v-43427afc] {\n  background: #4dc0b5;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--avatar__img img[data-v-43427afc] {\n  -o-object-fit: cover;\n     object-fit: cover;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--content[data-v-43427afc] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n}\n.comment--content p[data-v-43427afc] {\n  margin: 0;\n  padding: 0;\n}\n.comment--content__username[data-v-43427afc] {\n  font-weight: bold;\n}\n.comment--content__date[data-v-43427afc] {\n  margin-bottom: 1rem !important;\n  font-weight: 400;\n  color: gray;\n}\n.comment--content__content[data-v-43427afc] {\n  font-weight: 200;\n  color: black;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8926,7 +9069,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".post[data-v-d190e940] {\n  margin: 0.5rem auto;\n  padding: 0.5rem;\n}\n.post .post--description[data-v-d190e940] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 1rem 0.5rem;\n  border-radius: 1rem;\n}\n.post .post--description img[data-v-d190e940] {\n  border-radius: 20px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  width: 100%;\n  height: 100%;\n  margin-bottom: 2rem;\n  max-width: 500px;\n}\n.post .post--description p[data-v-d190e940] {\n  text-align: justify;\n  max-width: 500px;\n  font-weight: 200;\n}\n.post .post--description__footer[data-v-d190e940] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  width: 100%;\n  max-width: 500px;\n}\n.post .post--description__footer p[data-v-d190e940] {\n  color: #50B7F5FF;\n  font-weight: bold !important;\n}\n.post .post--comments[data-v-d190e940] {\n  margin: 2rem auto;\n  max-width: 500px;\n}\n.post .post--comments h2[data-v-d190e940] {\n  margin-bottom: 1rem;\n}\nh1[data-v-d190e940] {\n  text-align: center;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".post[data-v-d190e940] {\n  margin: 0.5rem auto;\n  padding: 0.5rem;\n}\n.post .post--description[data-v-d190e940] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 1rem 0.5rem;\n  border-radius: 1rem;\n}\n.post .post--description img[data-v-d190e940] {\n  border-radius: 20px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  width: 100%;\n  height: 100%;\n  margin-bottom: 2rem;\n  max-width: 500px;\n}\n.post .post--description p[data-v-d190e940] {\n  text-align: justify;\n  max-width: 500px;\n  font-weight: 200;\n}\n.post .post--description__footer[data-v-d190e940] {\n  width: 100%;\n  max-width: 500px;\n}\n.post .post--description__footer p[data-v-d190e940] {\n  color: #50B7F5FF;\n  font-weight: bold !important;\n  text-align: right;\n}\n.post .post--comments[data-v-d190e940] {\n  margin: 2rem auto;\n  max-width: 500px;\n}\n.post .post--comments h2[data-v-d190e940] {\n  margin-bottom: 1rem;\n}\n.post .post--comments__pagination[data-v-d190e940] {\n  display: flex;\n  color: #50B7F5FF;\n  gap: 1rem;\n  justify-content: space-between;\n}\n.post .post--comments__pagination p[data-v-d190e940]:last-child {\n  cursor: pointer;\n}\nh1[data-v-d190e940] {\n  text-align: center;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -65854,6 +65997,16 @@ var render = function() {
                           "button",
                           {
                             staticClass: "btn-primary",
+                            on: { click: _vm.createHandler }
+                          },
+                          [_vm._v("Create")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn-primary",
+                            attrs: { id: "closeModal" },
                             on: { click: _vm.hideModal }
                           },
                           [_vm._v("Close")]
@@ -66159,14 +66312,20 @@ var render = function() {
           staticClass: "sidebar__tweet btn-primary",
           on: { click: _vm.showModal }
         },
-        [_c("i", { staticClass: "fas fa-feather-alt" }), _vm._v(" Tweet\n    ")]
+        [
+          _c("i", { staticClass: "fas fa-feather-alt" }),
+          _vm._v(" " + _vm._s(_vm.title ? _vm.title : "Tweet") + "\n    ")
+        ]
       ),
       _vm._v(" "),
       _c(
         "Modal",
-        { attrs: { title: "New tweet" }, on: { closeModal: _vm.hideModal } },
-        [_c("TweetForm")],
-        1
+        {
+          attrs: { title: "New tweet" },
+          on: { closeModal: _vm.hideModal, create: _vm.handleCreate }
+        },
+        [_vm._t("default")],
+        2
       )
     ],
     1
@@ -66480,7 +66639,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "comment--content" }, [
       _c("p", { staticClass: "comment--content__username" }, [
-        _vm._v(_vm._s("Alexander MacQueen"))
+        _vm._v(_vm._s(_vm.comment.user.name))
       ]),
       _vm._v(" "),
       _c("p", { staticClass: "comment--content__date" }, [
@@ -66816,32 +66975,132 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "post--description__footer" }, [
                 _c("p", [
-                  _vm._v(_vm._s("@" + this.getUsername(_vm.post.user.email)))
-                ]),
-                _vm._v(" "),
-                _c("p", [
-                  _vm._v(_vm._s(_vm._f("fromNow")(_vm.post.created_at)))
+                  _vm._v(
+                    " posted " +
+                      _vm._s(_vm._f("fromNow")(_vm.post.created_at)) +
+                      " " +
+                      _vm._s("by @" + this.getUsername(_vm.post.user.email))
+                  )
                 ])
               ])
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "post--comments" },
-              [
-                _c("h2", [
-                  _vm._v("Comments (" + _vm._s(_vm.post.comments.length) + ")")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.post.comments, function(comment, index) {
-                  return _c("CommentItem", {
-                    key: index + "comment",
-                    attrs: { id: "comments", comment: comment }
-                  })
-                })
-              ],
-              2
-            )
+            _vm.loadingComments
+              ? _c("div", [_c("loading-container")], 1)
+              : _c("div", [
+                  _c(
+                    "div",
+                    { staticClass: "post--comments" },
+                    [
+                      _c("h2", [
+                        _vm._v(
+                          "Comments (" + _vm._s(_vm.post.comments.length) + ")"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.comments.slice(0, _vm.commentsSize), function(
+                        comment,
+                        index
+                      ) {
+                        return _c("CommentItem", {
+                          key: index + "comment",
+                          attrs: { id: "comments", comment: comment }
+                        })
+                      }),
+                      _vm._v(" "),
+                      _vm.comments.length > 9 &&
+                      _vm.commentsSize < _vm.comments.length
+                        ? _c(
+                            "div",
+                            { staticClass: "post--comments__pagination" },
+                            [
+                              _c("p"),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.commentsSize +
+                                      " of " +
+                                      _vm.comments.length
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "p",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.commentsSize < _vm.comments.length
+                                        ? (_vm.commentsSize += 5)
+                                        : ""
+                                    }
+                                  }
+                                },
+                                [_vm._v("load more")]
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "TweetButton",
+                        {
+                          attrs: { title: "comment" },
+                          on: {
+                            create: _vm.handleCreate,
+                            closeModal: _vm.handleCloseModal
+                          }
+                        },
+                        [
+                          _c("div", [
+                            _c(
+                              "div",
+                              [
+                                _c("label", [_vm._v("Enter your comment")]),
+                                _vm._v(" "),
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.comment,
+                                      expression: "comment"
+                                    }
+                                  ],
+                                  class: [
+                                    { "is-invalid": _vm.errorFor("content") }
+                                  ],
+                                  staticStyle: {
+                                    border: "1px solid #000",
+                                    width: "100%",
+                                    "margin-top": ".5rem"
+                                  },
+                                  attrs: { rows: "10" },
+                                  domProps: { value: _vm.comment },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.comment = $event.target.value
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-error", {
+                                  attrs: { errors: _vm.errorFor("content") }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        ]
+                      )
+                    ],
+                    2
+                  )
+                ])
           ])
         : _c("LoadingContainer")
     ],

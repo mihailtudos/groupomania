@@ -5,13 +5,35 @@
                 <img width="400px" height="100%" src="/images/post-default.webp" alt="test">
                 <p v-if="post">{{ post.excerpt }}</p>
                 <div class="post--description__footer">
-                    <p>{{'@' + this.getUsername(post.user.email) }}</p>
-                    <p>{{ post.created_at | fromNow }}</p>
+                    <p> posted {{ post.created_at | fromNow }} {{'by @' + this.getUsername(post.user.email) }}</p>
                 </div>
             </div>
-            <div class="post--comments">
-                <h2>Comments ({{ post.comments.length }})</h2>
-                <CommentItem id="comments"  v-for="(comment, index) in post.comments" :comment="comment" :key="index+'comment'" />
+            <div v-if="loadingComments">
+                <loading-container/>
+            </div>
+            <div v-else>
+                <div class="post--comments">
+                    <h2>Comments ({{ post.comments.length }})</h2>
+                    <CommentItem id="comments"  v-for="(comment, index) in comments.slice(0, commentsSize)" :comment="comment" :key="index+'comment'" />
+                    <div v-if="comments.length > 9 && commentsSize < comments.length" class="post--comments__pagination">
+                        <p></p>
+                        <p>{{ `${commentsSize} of ${comments.length}` }}</p>
+                        <p @click="commentsSize < comments.length ? commentsSize += 5 : ''">load more</p>
+                    </div>
+                    <TweetButton @create="handleCreate" @closeModal="handleCloseModal" :title="'comment'">
+                        <div>
+                            <div>
+                                <label>Enter your comment</label>
+                                <textarea
+                                    v-model="comment"
+                                    style="border: 1px solid #000; width: 100%; margin-top: .5rem"
+                                    rows="10"
+                                    :class="[{'is-invalid': errorFor('content')}]"></textarea>
+                                <v-error :errors="errorFor('content')" />
+                            </div>
+                        </div>
+                    </TweetButton>
+                </div>
             </div>
         </div>
         <LoadingContainer v-else/>
@@ -21,31 +43,79 @@
 <script>
 import LoadingContainer from "../../components/Shared/LoadingContainer";
 import CommentItem from "../../components/UI/CommentItem";
+import TweetButton from "../../components/Shared/TweetButton";
+import validationErrors from "../../components/Shared/mixins/validationErrors";
+
 export default {
     name: "Post",
-    components: {CommentItem, LoadingContainer},
+    mixins: [validationErrors],
+    components: {TweetButton, CommentItem, LoadingContainer},
     data() {
         return {
             post: null,
+            comments: null,
             loading: false,
-            error: false,
+            errors: {},
+            comment: '',
+            loadingComments: false,
+            errorLoadingComments: false,
+            commentsSize: 10
         }
     },
     created() {
-        if (this.$route.params.post) {
-            this.post = this.$route.params.post;
-        } else {
-            this.loading = true;
-            this.error = false;
-            axios.get(`/api/posts/${this.$route.params.id}`)
-            .then(response => this.post = response.data)
-            .catch(e => this.error = true)
-            .then(() => this.loading = false);
-        }
+        this.loading = true;
+        this.errors = {};
+        axios.get(`/api/posts/${this.$route.params.id}`)
+        .then(response => {
+            this.post = response.data;
+            this.loadComments();
+        })
+        .catch(error => this.errors = error.response && error.response.data.errors)
+        .then(() => this.loading = false);
     },
     mounted() {
         if(this.$router.currentRoute['hash']){ 	Vue.use(VueScrollTo); 	VueScrollTo.scrollTo(this.$router.currentRoute['hash'], 500); 	}
-},
+    },
+    methods: {
+        handleCloseModal() {
+            this.loading = false;
+            this.errors = {};
+            this.comment = '';
+        },
+        async handleCreate() {
+            this.errors = {};
+           if (this.comment.length > 5) {
+               try {
+                   const comment = (await axios.post('/api/comments', {
+                       post_id: this.post.id,
+                       user_id: this.$store.state.currentUser.user.id,
+                       content: this.comment
+                   })).data.comment;
+                   this.updateComments(comment);
+               } catch (error) {
+                   this.errors = error.response && error.response.data.errors;
+               }
+           } else {
+               this.errors.content = ["The content must be at least 5 characters."]
+           }
+        },
+        updateComments(comment) {
+            this.comments.push(comment);
+            this.commentsSize = this.comments.length;
+            this.handleCloseModal();
+            document.getElementById('closeModal').click();
+        },
+        async loadComments() {
+            this.loadingComments = true;
+            this.errorLoadingComments = false;
+            try {
+                this.comments = (await axios.get(`/api/posts/${this.post.id}/comments`)).data.comments;
+                this.loadingComments = false;
+            } catch (error) {
+                this.errorLoadingComments = true;
+            }
+        }
+    }
 }
 </script>
 
@@ -74,14 +144,12 @@ export default {
                 font-weight: 200;
             }
             &__footer {
-                display: flex;
-                align-items: baseline;
-                justify-content: space-between;
                 width: 100%;
                 max-width: 500px;
                 p {
                     color: #50B7F5FF;
                     font-weight: bold!important;
+                    text-align: right;
                 }
             }
         }
@@ -90,6 +158,15 @@ export default {
             max-width: 500px;
             h2 {
                 margin-bottom: 1rem;
+            }
+            &__pagination {
+                display: flex;
+                color: #50B7F5FF;
+                gap: 1rem;
+                justify-content: space-between;
+                p:last-child {
+                    cursor: pointer;
+                }
             }
         }
     }

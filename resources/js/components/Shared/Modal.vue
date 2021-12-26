@@ -7,7 +7,8 @@
                         <p class="modal--title">{{ title }}</p>
                         <slot class="model--content"></slot>
                         <div class="modal--controls">
-                            <button class="btn-primary" @click="hideModal">Close</button>
+                            <button class="btn-primary" @click="createHandler">Create</button>
+                            <button id="closeModal" class="btn-primary" @click="hideModal">Close</button>
                         </div>
                     </div>
                 </transition>
@@ -22,8 +23,10 @@ export default {
     props: ['title', 'video', 'modalHandler'],
     methods: {
         hideModal() {
-            console.log('sss')
             this.$emit('closeModal');
+        },
+        createHandler() {
+            this.$emit('create');
         }
     },
     mounted() {

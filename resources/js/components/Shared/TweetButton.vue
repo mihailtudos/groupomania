@@ -1,10 +1,10 @@
 <template>
     <div>
         <button class="sidebar__tweet btn-primary" @click="showModal">
-            <i class="fas fa-feather-alt"></i> Tweet
+            <i class="fas fa-feather-alt"></i> {{ title ? title : 'Tweet' }}
         </button>
-        <Modal @closeModal="hideModal" :title="'New tweet'">
-            <TweetForm/>
+        <Modal @closeModal="hideModal" @create="handleCreate" :title="'New tweet'">
+           <slot></slot>
         </Modal>
     </div>
 </template>
@@ -21,14 +21,17 @@ export default {
             show: false,
         }
     },
+    props: ['title'],
     methods: {
         hideModal() {
-            console.log('close')
             this.show = false;
+            this.$emit('closeModal');
         },
         showModal() {
-            console.log('show')
             this.show = true;
+        },
+        handleCreate() {
+            this.$emit('create');
         }
     }
 }
