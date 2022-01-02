@@ -9,6 +9,10 @@
             <p class="comment--content__username">{{ comment.user.name }}</p>
             <p class="comment--content__date">{{ comment.created_at | fromNow }}</p>
             <p class="comment--content__content">{{ comment.content }}</p>
+            <div v-if="this.$store.getters['currentUser/user'].id === comment['user_id']" class="comment--content__controls">
+                <span @click="handleDeleteClick(comment.id)" class="delete"><i class="fas fa-trash-alt"></i></span>
+                <span @click="handleEditClick(comment.id)" class="edit"><i class="fas fa-pen-nib"></i></span>
+            </div>
         </div>
     </div>
 </template>
@@ -22,6 +26,14 @@ export default {
         comment: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        handleDeleteClick(id) {
+            this.$emit('deleteComment', id);
+        },
+        handleEditClick(id) {
+            this.$emit('editComment', id);
         }
     }
 }
@@ -52,6 +64,8 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        position: relative;
+        width: 100%;
         p {
             margin: 0;
             padding: 0;
@@ -67,6 +81,24 @@ export default {
         &__content {
             font-weight: 200;
             color: black;
+        }
+        &__controls {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            gap: .5rem;
+            top: 0;
+            right: 1rem;
+            span {
+                font-size: .8rem;
+                cursor: pointer;
+                &.edit {
+                    color: #4dc0b5;
+                }
+                &.delete {
+                    color: #bb1111;
+                }
+            }
         }
     }
 }

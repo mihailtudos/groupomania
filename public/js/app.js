@@ -2764,7 +2764,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Modal",
-  props: ['title', 'video', 'modalHandler'],
+  props: ['title', 'video', 'modalHandler', 'noCreate'],
   methods: {
     hideModal: function hideModal() {
       this.$emit('closeModal');
@@ -3079,6 +3079,63 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modal */ "./resources/js/components/Shared/Modal.vue");
+/* harmony import */ var _TweetBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TweetBox */ "./resources/js/components/Shared/TweetBox.vue");
+/* harmony import */ var _TweetForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TweetForm */ "./resources/js/components/Shared/TweetForm.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "TweetComment",
+  components: {
+    TweetForm: _TweetForm__WEBPACK_IMPORTED_MODULE_2__["default"],
+    TweetBox: _TweetBox__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      show: false
+    };
+  },
+  props: ['title', 'update'],
+  methods: {
+    hideModal: function hideModal() {
+      this.show = false;
+      this.$emit('closeModal');
+    },
+    showModal: function showModal() {
+      this.show = true;
+    },
+    handleCreate: function handleCreate() {
+      this.$emit('create');
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=script&lang=js& ***!
@@ -3270,6 +3327,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CommentItem",
@@ -3280,6 +3341,14 @@ __webpack_require__.r(__webpack_exports__);
     comment: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    handleDeleteClick: function handleDeleteClick(id) {
+      this.$emit('deleteComment', id);
+    },
+    handleEditClick: function handleEditClick(id) {
+      this.$emit('editComment', id);
     }
   }
 });
@@ -3526,8 +3595,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
 /* harmony import */ var _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/UI/CommentItem */ "./resources/js/components/UI/CommentItem.vue");
-/* harmony import */ var _components_Shared_TweetButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/TweetButton */ "./resources/js/components/Shared/TweetButton.vue");
-/* harmony import */ var _components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Shared/mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+/* harmony import */ var _components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+/* harmony import */ var _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Shared/Modal */ "./resources/js/components/Shared/Modal.vue");
+/* harmony import */ var _components_Shared_TweetComment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/Shared/TweetComment */ "./resources/js/components/Shared/TweetComment.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3576,15 +3646,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Post",
-  mixins: [_components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_4__["default"]],
+  mixins: [_components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_3__["default"]],
   components: {
-    TweetButton: _components_Shared_TweetButton__WEBPACK_IMPORTED_MODULE_3__["default"],
+    TweetComment: _components_Shared_TweetComment__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Modal: _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_4__["default"],
     CommentItem: _components_UI_CommentItem__WEBPACK_IMPORTED_MODULE_2__["default"],
     LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
@@ -3597,7 +3682,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       comment: '',
       loadingComments: false,
       errorLoadingComments: false,
-      commentsSize: 10
+      commentsSize: 10,
+      show: false,
+      commentToUpdate: null
     };
   },
   created: function created() {
@@ -3626,6 +3713,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.loading = false;
       this.errors = {};
       this.comment = '';
+      this.show = false;
+      this.commentToUpdate = null;
+      document.getElementById('closeModal').click();
     },
     handleCreate: function handleCreate() {
       var _this2 = this;
@@ -3654,7 +3744,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 comment = _context.sent.data.comment;
 
-                _this2.updateComments(comment);
+                _this2.updateComments(comment, 'created');
 
                 _context.next = 12;
                 break;
@@ -3679,43 +3769,149 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[2, 9]]);
       }))();
     },
-    updateComments: function updateComments(comment) {
-      this.comments.push(comment);
-      this.commentsSize = this.comments.length;
-      this.handleCloseModal();
-      document.getElementById('closeModal').click();
-    },
-    loadComments: function loadComments() {
+    handleDeleteItem: function handleDeleteItem(id) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this3.loadingComments = true;
-                _this3.errorLoadingComments = false;
-                _context2.prev = 2;
-                _context2.next = 5;
-                return axios.get("/api/posts/".concat(_this3.post.id, "/comments"));
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios["delete"]("/api/comments/".concat(id), {
+                  userId: _this3.$store.getters["currentUser/user"].id
+                });
 
-              case 5:
-                _this3.comments = _context2.sent.data.comments;
-                _this3.loadingComments = false;
-                _context2.next = 12;
+              case 3:
+                response = _context2.sent;
+
+                if (response.status == 204) {
+                  _this3.updateComments(id, 'deleted');
+                }
+
+                _context2.next = 10;
                 break;
 
-              case 9:
-                _context2.prev = 9;
-                _context2.t0 = _context2["catch"](2);
-                _this3.errorLoadingComments = true;
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                _this3.show = true;
 
-              case 12:
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[2, 9]]);
+        }, _callee2, null, [[0, 7]]);
+      }))();
+    },
+    saveClickHandler: function saveClickHandler() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return axios.put("/api/comments/".concat(_this4.commentToUpdate.id), {
+                  content: _this4.comment
+                });
+
+              case 3:
+                response = _context3.sent;
+
+                if (response.status === 204) {
+                  _this4.updateComments(_this4.commentToUpdate.id, 'edited');
+                } else {
+                  _this4.show = true;
+                }
+
+                _context3.next = 11;
+                break;
+
+              case 7:
+                _context3.prev = 7;
+                _context3.t0 = _context3["catch"](0);
+
+                if (_context3.t0.response.status === 422) {
+                  _this4.errors = _context3.t0.response.data.errors;
+                }
+
+                _this4.errorLoadingComments = true;
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 7]]);
+      }))();
+    },
+    handleEditItem: function handleEditItem(id) {
+      this.commentToUpdate = this.comments[this.comments.findIndex(function (comment) {
+        return comment.id === id;
+      })];
+      document.getElementById('commentModal').click();
+      this.comment = this.commentToUpdate.content;
+    },
+    updateComments: function updateComments(comment, action) {
+      var _this5 = this;
+
+      if (action === 'edited') {
+        this.comments[this.comments.findIndex(function (comment) {
+          return comment.id === _this5.commentToUpdate.id;
+        })].content = this.comment;
+      }
+
+      if (action === 'deleted') {
+        this.comments.splice(this.comments.findIndex(function (element) {
+          return element.id === comment;
+        }), 1);
+      }
+
+      if (action === 'created') {
+        this.comments.push(comment);
+        this.commentsSize = this.comments.length;
+      }
+
+      this.handleCloseModal();
+    },
+    loadComments: function loadComments() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this6.loadingComments = true;
+                _this6.errorLoadingComments = false;
+                _context4.prev = 2;
+                _context4.next = 5;
+                return axios.get("/api/posts/".concat(_this6.post.id, "/comments"));
+
+              case 5:
+                _this6.comments = _context4.sent.data.comments;
+                _this6.loadingComments = false;
+                _context4.next = 12;
+                break;
+
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](2);
+                _this6.errorLoadingComments = true;
+
+              case 12:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[2, 9]]);
       }))();
     }
   }
@@ -8884,6 +9080,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".sidebar__tweet[data-v-e0333138] {\n  
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".sidebar__tweet[data-v-55c6b61d] {\n  background-color: #50b7f5;\n  width: 100%;\n  border: none;\n  color: white;\n  font-weight: 900;\n  border-radius: 30px;\n  height: 50px;\n  margin-top: 20px;\n  cursor: pointer;\n  font-size: 1rem;\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=style&index=0&id=17c41276&scoped=true&lang=scss&":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=style&index=0&id=17c41276&scoped=true&lang=scss& ***!
@@ -8949,7 +9169,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".comment[data-v-43427afc] {\n  padding: 1rem;\n  border-radius: 1rem;\n  display: flex;\n  gap: 1rem;\n  margin-bottom: 1rem;\n}\n.comment--avatar__img[data-v-43427afc] {\n  background: #4dc0b5;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--avatar__img img[data-v-43427afc] {\n  -o-object-fit: cover;\n     object-fit: cover;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--content[data-v-43427afc] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n}\n.comment--content p[data-v-43427afc] {\n  margin: 0;\n  padding: 0;\n}\n.comment--content__username[data-v-43427afc] {\n  font-weight: bold;\n}\n.comment--content__date[data-v-43427afc] {\n  margin-bottom: 1rem !important;\n  font-weight: 400;\n  color: gray;\n}\n.comment--content__content[data-v-43427afc] {\n  font-weight: 200;\n  color: black;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".comment[data-v-43427afc] {\n  padding: 1rem;\n  border-radius: 1rem;\n  display: flex;\n  gap: 1rem;\n  margin-bottom: 1rem;\n}\n.comment--avatar__img[data-v-43427afc] {\n  background: #4dc0b5;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--avatar__img img[data-v-43427afc] {\n  -o-object-fit: cover;\n     object-fit: cover;\n  max-width: 30px;\n  max-height: 30px;\n  border-radius: 50%;\n}\n.comment--content[data-v-43427afc] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  position: relative;\n  width: 100%;\n}\n.comment--content p[data-v-43427afc] {\n  margin: 0;\n  padding: 0;\n}\n.comment--content__username[data-v-43427afc] {\n  font-weight: bold;\n}\n.comment--content__date[data-v-43427afc] {\n  margin-bottom: 1rem !important;\n  font-weight: 400;\n  color: gray;\n}\n.comment--content__content[data-v-43427afc] {\n  font-weight: 200;\n  color: black;\n}\n.comment--content__controls[data-v-43427afc] {\n  position: absolute;\n  display: flex;\n  justify-content: space-between;\n  gap: 0.5rem;\n  top: 0;\n  right: 1rem;\n}\n.comment--content__controls span[data-v-43427afc] {\n  font-size: 0.8rem;\n  cursor: pointer;\n}\n.comment--content__controls span.edit[data-v-43427afc] {\n  color: #4dc0b5;\n}\n.comment--content__controls span.delete[data-v-43427afc] {\n  color: #bb1111;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9093,7 +9313,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -62646,6 +62866,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_style_index_0_id_55c6b61d_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_style_index_0_id_55c6b61d_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_style_index_0_id_55c6b61d_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=style&index=0&id=17c41276&scoped=true&lang=scss&":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=style&index=0&id=17c41276&scoped=true&lang=scss& ***!
@@ -63724,6 +63974,47 @@ component.options.__file = "resources/js/components/Shared/TweetButton.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Shared/TweetComment.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/Shared/TweetComment.vue ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true& */ "./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true&");
+/* harmony import */ var _TweetComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TweetComment.vue?vue&type=script&lang=js& */ "./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js&");
+/* harmony import */ var _TweetComment_vue_vue_type_style_index_0_id_55c6b61d_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& */ "./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _TweetComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "55c6b61d",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Shared/TweetComment.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Shared/TweetForm.vue":
 /*!******************************************************!*\
   !*** ./resources/js/components/Shared/TweetForm.vue ***!
@@ -64340,6 +64631,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetComment.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Shared/TweetForm.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/Shared/TweetForm.vue?vue&type=script&lang=js& ***!
@@ -64639,6 +64946,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetButton_vue_vue_type_style_index_0_id_e0333138_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetButton.vue?vue&type=style&index=0&id=e0333138&scoped=true&lang=scss& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetButton.vue?vue&type=style&index=0&id=e0333138&scoped=true&lang=scss&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&":
+/*!*******************************************************************************************************************!*\
+  !*** ./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& ***!
+  \*******************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_style_index_0_id_55c6b61d_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=style&index=0&id=55c6b61d&scoped=true&lang=scss&");
 
 
 /***/ }),
@@ -64977,6 +65297,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetButton_vue_vue_type_template_id_e0333138_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetButton_vue_vue_type_template_id_e0333138_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetButton.vue?vue&type=template&id=e0333138&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetButton.vue?vue&type=template&id=e0333138&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true& ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TweetComment_vue_vue_type_template_id_55c6b61d_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true&");
 
 
 /***/ }),
@@ -65996,6 +66333,14 @@ var render = function() {
                         _c(
                           "button",
                           {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: !_vm.noCreate,
+                                expression: "!noCreate"
+                              }
+                            ],
                             staticClass: "btn-primary",
                             on: { click: _vm.createHandler }
                           },
@@ -66338,6 +66683,61 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetComment.vue?vue&type=template&id=55c6b61d&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "button",
+        {
+          staticClass: "sidebar__tweet btn-primary",
+          attrs: { id: "commentModal" },
+          on: { click: _vm.showModal }
+        },
+        [
+          _c("i", { staticClass: "fas fa-feather-alt" }),
+          _vm._v(" " + _vm._s(_vm.title ? _vm.title : "Tweet") + "\n    ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "Modal",
+        {
+          attrs: {
+            noCreate: _vm.update ? 1 : 0,
+            title: _vm.update ? "Update comment" : "New tweet"
+          },
+          on: { closeModal: _vm.hideModal, create: _vm.handleCreate }
+        },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=template&id=17c41276&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Shared/TweetForm.vue?vue&type=template&id=17c41276&scoped=true& ***!
@@ -66648,7 +67048,37 @@ var render = function() {
       _vm._v(" "),
       _c("p", { staticClass: "comment--content__content" }, [
         _vm._v(_vm._s(_vm.comment.content))
-      ])
+      ]),
+      _vm._v(" "),
+      this.$store.getters["currentUser/user"].id === _vm.comment["user_id"]
+        ? _c("div", { staticClass: "comment--content__controls" }, [
+            _c(
+              "span",
+              {
+                staticClass: "delete",
+                on: {
+                  click: function($event) {
+                    return _vm.handleDeleteClick(_vm.comment.id)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-trash-alt" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "edit",
+                on: {
+                  click: function($event) {
+                    return _vm.handleEditClick(_vm.comment.id)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-pen-nib" })]
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }
@@ -66959,6 +67389,19 @@ var render = function() {
     "div",
     { staticClass: "post" },
     [
+      _c(
+        "Modal",
+        {
+          attrs: { noCreate: 1, title: "Opps something went wrong" },
+          on: { closeModal: _vm.handleCloseModal }
+        },
+        [
+          _c("h3", [
+            _vm._v("We couldn't process your request please try again later :(")
+          ])
+        ]
+      ),
+      _vm._v(" "),
       !_vm.loading
         ? _c("div", [
             _c("div", { staticClass: "post--description" }, [
@@ -67004,7 +67447,11 @@ var render = function() {
                       ) {
                         return _c("CommentItem", {
                           key: index + "comment",
-                          attrs: { id: "comments", comment: comment }
+                          attrs: { id: "comments", comment: comment },
+                          on: {
+                            deleteComment: _vm.handleDeleteItem,
+                            editComment: _vm.handleEditItem
+                          }
                         })
                       }),
                       _vm._v(" "),
@@ -67044,9 +67491,12 @@ var render = function() {
                         : _vm._e(),
                       _vm._v(" "),
                       _c(
-                        "TweetButton",
+                        "TweetComment",
                         {
-                          attrs: { title: "comment" },
+                          attrs: {
+                            update: _vm.commentToUpdate ? 1 : 0,
+                            title: "comment"
+                          },
                           on: {
                             create: _vm.handleCreate,
                             closeModal: _vm.handleCloseModal
@@ -67090,7 +67540,28 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("v-error", {
                                   attrs: { errors: _vm.errorFor("content") }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.commentToUpdate,
+                                        expression: "commentToUpdate"
+                                      }
+                                    ],
+                                    staticClass: "btn-secondary",
+                                    staticStyle: {
+                                      "margin-top": ".5rem",
+                                      width: "100%"
+                                    },
+                                    on: { click: _vm.saveClickHandler }
+                                  },
+                                  [_vm._v("Save")]
+                                )
                               ],
                               1
                             )

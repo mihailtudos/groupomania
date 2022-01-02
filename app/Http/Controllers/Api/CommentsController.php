@@ -87,17 +87,30 @@ class CommentsController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        $data = $request->validate([
+            'content' => ['required', 'string', 'min:5']
+        ]);
+        if (auth()->user()->id == $comment['user_id']) {
+            $comment->update([
+               'content' => $data['content'],
+            ]);
+            return response()->noContent();
+        }
+        return response(null, 404);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|int
      */
     public function destroy(Comment $comment)
     {
-        //
+        if ($comment->user_id === auth()->user()->id) {
+            $comment->delete();
+            return response()->noContent();
+        }
+        return response(null,404);
     }
 }

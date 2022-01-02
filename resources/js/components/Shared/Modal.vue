@@ -7,7 +7,7 @@
                         <p class="modal--title">{{ title }}</p>
                         <slot class="model--content"></slot>
                         <div class="modal--controls">
-                            <button class="btn-primary" @click="createHandler">Create</button>
+                            <button v-show="!noCreate" class="btn-primary" @click="createHandler">Create</button>
                             <button id="closeModal" class="btn-primary" @click="hideModal">Close</button>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
 <script>
 export default {
     name: "Modal",
-    props: ['title', 'video', 'modalHandler'],
+    props: ['title', 'video', 'modalHandler', 'noCreate'],
     methods: {
         hideModal() {
             this.$emit('closeModal');

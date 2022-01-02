@@ -1,5 +1,8 @@
 <template>
     <div class="post">
+        <Modal @closeModal="handleCloseModal" :noCreate="1" title="Opps something went wrong">
+            <h3>We couldn't process your request please try again later :(</h3>
+        </Modal>
         <div v-if="!loading">
             <div class="post--description">
                 <img width="400px" height="100%" src="/images/post-default.webp" alt="test">
@@ -14,13 +17,22 @@
             <div v-else>
                 <div class="post--comments">
                     <h2>Comments ({{ post.comments.length }})</h2>
-                    <CommentItem id="comments"  v-for="(comment, index) in comments.slice(0, commentsSize)" :comment="comment" :key="index+'comment'" />
+                    <CommentItem
+                        id="comments"
+                        @deleteComment="handleDeleteItem"
+                        @editComment="handleEditItem"
+                        v-for="(comment, index) in comments.slice(0, commentsSize)"
+                        :comment="comment" :key="index+'comment'" />
                     <div v-if="comments.length > 9 && commentsSize < comments.length" class="post--comments__pagination">
                         <p></p>
                         <p>{{ `${commentsSize} of ${comments.length}` }}</p>
                         <p @click="commentsSize < comments.length ? commentsSize += 5 : ''">load more</p>
                     </div>
-                    <TweetButton @create="handleCreate" @closeModal="handleCloseModal" :title="'comment'">
+                    <TweetComment
+                        @create="handleCreate"
+                        @closeModal="handleCloseModal"
+                        :update="commentToUpdate ? 1 : 0"
+                        :title="'comment'">
                         <div>
                             <div>
                                 <label>Enter your comment</label>
@@ -30,9 +42,10 @@
                                     rows="10"
                                     :class="[{'is-invalid': errorFor('content')}]"></textarea>
                                 <v-error :errors="errorFor('content')" />
+                                <button @click="saveClickHandler" v-show="commentToUpdate" class="btn-secondary" style=" margin-top: .5rem; width: 100%">Save</button>
                             </div>
                         </div>
-                    </TweetButton>
+                    </TweetComment>
                 </div>
             </div>
         </div>
@@ -43,13 +56,14 @@
 <script>
 import LoadingContainer from "../../components/Shared/LoadingContainer";
 import CommentItem from "../../components/UI/CommentItem";
-import TweetButton from "../../components/Shared/TweetButton";
 import validationErrors from "../../components/Shared/mixins/validationErrors";
+import Modal from "../../components/Shared/Modal";
+import TweetComment from "../../components/Shared/TweetComment";
 
 export default {
     name: "Post",
     mixins: [validationErrors],
-    components: {TweetButton, CommentItem, LoadingContainer},
+    components: {TweetComment, Modal, CommentItem, LoadingContainer},
     data() {
         return {
             post: null,
@@ -59,7 +73,9 @@ export default {
             comment: '',
             loadingComments: false,
             errorLoadingComments: false,
-            commentsSize: 10
+            commentsSize: 10,
+            show: false,
+            commentToUpdate: null,
         }
     },
     created() {
@@ -81,6 +97,9 @@ export default {
             this.loading = false;
             this.errors = {};
             this.comment = '';
+            this.show = false;
+            this.commentToUpdate = null;
+            document.getElementById('closeModal').click();
         },
         async handleCreate() {
             this.errors = {};
@@ -91,7 +110,7 @@ export default {
                        user_id: this.$store.state.currentUser.user.id,
                        content: this.comment
                    })).data.comment;
-                   this.updateComments(comment);
+                   this.updateComments(comment, 'created');
                } catch (error) {
                    this.errors = error.response && error.response.data.errors;
                }
@@ -99,11 +118,56 @@ export default {
                this.errors.content = ["The content must be at least 5 characters."]
            }
         },
-        updateComments(comment) {
-            this.comments.push(comment);
-            this.commentsSize = this.comments.length;
+        async handleDeleteItem(id) {
+           try {
+               const response = (await axios.delete(`/api/comments/${id}`, {
+                   userId: this.$store.getters["currentUser/user"].id
+               }));
+               if (response.status == 204) {
+                   this.updateComments(id, 'deleted')
+               }
+           } catch (error) {
+                this.show = true;
+           }
+        },
+        async saveClickHandler() {
+          try {
+              const response = await axios.put(`/api/comments/${this.commentToUpdate.id}`, {
+                  content: this.comment,
+              });
+              if (response.status === 204) {
+                  this.updateComments(this.commentToUpdate.id, 'edited')
+              } else {
+                  this.show = true;
+              }
+          }  catch (error) {
+              if (error.response.status === 422) {
+                  this.errors = error.response.data.errors;
+              }
+              this.errorLoadingComments = true;
+          }
+        },
+        handleEditItem(id) {
+            this.commentToUpdate = this.comments[this.comments.findIndex(comment => comment.id === id)];
+            document.getElementById('commentModal').click();
+            this.comment = this.commentToUpdate.content;
+        },
+
+        updateComments(comment, action) {
+            if (action === 'edited') {
+                this.comments[this.comments.findIndex(comment => comment.id === this.commentToUpdate.id)].content = this.comment;
+            }
+
+            if (action === 'deleted') {
+                this.comments.splice(this.comments.findIndex(element => element.id === comment),1);
+            }
+
+            if (action === 'created') {
+                this.comments.push(comment);
+                this.commentsSize = this.comments.length;
+            }
+
             this.handleCloseModal();
-            document.getElementById('closeModal').click();
         },
         async loadComments() {
             this.loadingComments = true;
