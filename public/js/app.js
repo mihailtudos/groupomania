@@ -3715,7 +3715,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.comment = '';
       this.show = false;
       this.commentToUpdate = null;
-      document.getElementById('closeModal').click();
+      var closeBtn = document.getElementById('closeModal');
+
+      if (closeBtn) {
+        closeBtn.click();
+      }
     },
     handleCreate: function handleCreate() {
       var _this2 = this;
@@ -3787,19 +3791,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 3:
                 response = _context2.sent;
 
-                if (response.status == 204) {
+                if (Number.parseInt(response.status) === 204) {
                   _this3.updateComments(id, 'deleted');
                 }
 
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
 
               case 7:
                 _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
+                console.log(id);
                 _this3.show = true;
 
-              case 10:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -3877,6 +3882,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (action === 'created') {
         this.comments.push(comment);
         this.commentsSize = this.comments.length;
+        this.scrollToBottom();
       }
 
       this.handleCloseModal();
@@ -3913,6 +3919,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee4, null, [[2, 9]]);
       }))();
+    },
+    scrollToBottom: function scrollToBottom() {
+      document.querySelector('.content .post').scrollIntoView(false);
     }
   }
 });
@@ -67433,7 +67442,11 @@ var render = function() {
               : _c("div", [
                   _c(
                     "div",
-                    { staticClass: "post--comments" },
+                    {
+                      ref: "commentsContainer",
+                      staticClass: "post--comments",
+                      attrs: { id: "commentsContainer" }
+                    },
                     [
                       _c("h2", [
                         _vm._v(

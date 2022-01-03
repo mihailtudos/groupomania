@@ -15,7 +15,7 @@
                 <loading-container/>
             </div>
             <div v-else>
-                <div class="post--comments">
+                <div class="post--comments" ref="commentsContainer" id="commentsContainer">
                     <h2>Comments ({{ post.comments.length }})</h2>
                     <CommentItem
                         id="comments"
@@ -99,7 +99,10 @@ export default {
             this.comment = '';
             this.show = false;
             this.commentToUpdate = null;
-            document.getElementById('closeModal').click();
+            const closeBtn = document.getElementById('closeModal');
+            if (closeBtn) {
+                closeBtn.click();
+            }
         },
         async handleCreate() {
             this.errors = {};
@@ -119,14 +122,16 @@ export default {
            }
         },
         async handleDeleteItem(id) {
+
            try {
                const response = (await axios.delete(`/api/comments/${id}`, {
                    userId: this.$store.getters["currentUser/user"].id
                }));
-               if (response.status == 204) {
+               if (Number.parseInt(response.status) === 204) {
                    this.updateComments(id, 'deleted')
                }
            } catch (error) {
+               console.log(id)
                 this.show = true;
            }
         },
@@ -165,6 +170,7 @@ export default {
             if (action === 'created') {
                 this.comments.push(comment);
                 this.commentsSize = this.comments.length;
+                this.scrollToBottom();
             }
 
             this.handleCloseModal();
@@ -178,6 +184,9 @@ export default {
             } catch (error) {
                 this.errorLoadingComments = true;
             }
+        },
+        scrollToBottom() {
+            document.querySelector('.content .post').scrollIntoView(false);
         }
     }
 }

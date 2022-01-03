@@ -51,6 +51,8 @@ p {
     margin-top: 0;
     margin-bottom: 1rem;
 }
+html { height: 100%; overflow:auto; }
+body { height: 100%; }
 
 .btn-primary, .btn-secondary {
     border: 1px solid $twitter-color;
