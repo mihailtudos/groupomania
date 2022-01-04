@@ -3,7 +3,11 @@
         <div class="post-container">
             <div class="post--header">
                 <div class="post--header__author">
-                    <h2>{{ item.user.name }} <span>@somethgoth</span></h2>
+                    <h2>{{ item.user.name }}
+                        <span>{{ userName }}</span>
+                        <span v-if="item.user.id === this.$store.getters['currentUser/user'].id" @click="$emit('postDelete', item.id)" class="delete"><i class="fas fa-trash-alt"></i></span>
+                        <span v-if="item.user.id === this.$store.getters['currentUser/user'].id" @click="$emit('postEdit', item.id)" class="edit"><i class="fas fa-pen-nib"></i></span>
+                    </h2>
                 </div>
                 <div class="post__header--description">
                     <p v-if="item.excerpt.length <= 100">{{ item.excerpt }}</p>
@@ -49,6 +53,9 @@ export default {
         ...mapGetters({
             user: 'currentUser/user'
         }),
+        userName() {
+            return `@${this.item.user.email.split('@')[0]}`
+        }
     },
     methods: {
         canLike(id) {
@@ -127,6 +134,14 @@ $twitter-background: #e6ecf0;
                     font-size: .7rem;
                     color: #50B7F5FF;
                 }
+                .delete {
+                    color: darkred;
+                    cursor: pointer;
+                }
+                .edit {
+                    color: #38c172;
+                    cursor: pointer;
+                }
             }
         }
         &--description {
@@ -181,7 +196,6 @@ $twitter-background: #e6ecf0;
         &__footer {
             padding: 1rem;
             display: flex;
-            justify-content: center;
             gap: 1rem;
         }
     }

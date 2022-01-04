@@ -7,6 +7,8 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -120,7 +122,19 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        if (auth()->user()->id === $post->user->id) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $result = $post->delete();
+            if ($result) {
+                return response()->noContent();
+            } else {
+                return response(400);
+            }
+        }
+        return response('', 401);
     }
 
     public function comments($id): \Illuminate\Http\JsonResponse

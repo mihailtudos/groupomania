@@ -2817,6 +2817,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2838,9 +2842,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       required: true
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)({
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)({
     user: 'currentUser/user'
-  })),
+  })), {}, {
+    userName: function userName() {
+      return "@".concat(this.item.user.email.split('@')[0]);
+    }
+  }),
   methods: {
     canLike: function canLike(id) {
       if (id) {
@@ -3635,11 +3643,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_Shared_PostItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Shared/PostItem */ "./resources/js/components/Shared/PostItem.vue");
-/* harmony import */ var _components_Shared_TweetBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/TweetBox */ "./resources/js/components/Shared/TweetBox.vue");
-/* harmony import */ var _components_Shared_Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Shared/Spinner */ "./resources/js/components/Shared/Spinner.vue");
-/* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
-/* harmony import */ var _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Shared/Modal */ "./resources/js/components/Shared/Modal.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Shared_PostItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/PostItem */ "./resources/js/components/Shared/PostItem.vue");
+/* harmony import */ var _components_Shared_TweetBox__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Shared/TweetBox */ "./resources/js/components/Shared/TweetBox.vue");
+/* harmony import */ var _components_Shared_Spinner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/Spinner */ "./resources/js/components/Shared/Spinner.vue");
+/* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
+/* harmony import */ var _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/Shared/Modal */ "./resources/js/components/Shared/Modal.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
 //
 //
 //
@@ -3672,11 +3689,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    Modal: _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_4__["default"],
-    LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Spinner: _components_Shared_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"],
-    TweetBox: _components_Shared_TweetBox__WEBPACK_IMPORTED_MODULE_1__["default"],
-    PostItem: _components_Shared_PostItem__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Modal: _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_5__["default"],
+    LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Spinner: _components_Shared_Spinner__WEBPACK_IMPORTED_MODULE_3__["default"],
+    TweetBox: _components_Shared_TweetBox__WEBPACK_IMPORTED_MODULE_2__["default"],
+    PostItem: _components_Shared_PostItem__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   created: function created() {
     var _this = this;
@@ -3693,6 +3710,62 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     handleNewPostCreated: function handleNewPostCreated(post) {
       this.posts.unshift(post);
+    },
+    handlePostDelete: function handlePostDelete(id) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return axios["delete"]("/api/posts/".concat(id));
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.status === 204)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _this2.updatePostsList(id, 'deleted');
+
+                return _context.abrupt("return", '');
+
+              case 7:
+                throw new Error('Something went wrong.');
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](0);
+                _this2.show = true;
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 10]]);
+      }))();
+    },
+    updatePostsList: function updatePostsList(id, action) {
+      var _this3 = this;
+
+      if (action === 'edited') {
+        this.comments[this.comments.findIndex(function (comment) {
+          return comment.id === _this3.commentToUpdate.id;
+        })].content = this.comment;
+      }
+
+      if (action === 'deleted') {
+        this.posts.splice(this.posts.findIndex(function (element) {
+          return element.id === id;
+        }), 1);
+      }
     }
   }
 });
@@ -4184,10 +4257,7 @@ Vue.mixin({
       return email.split('@')[0];
     },
     isImage: function isImage(image) {
-      console.log(image.name);
-
       if (/\.(jpe?g|png|gif|webp)$/i.test(image.name)) {
-        console.log('passed');
         return true;
       }
 
@@ -9200,7 +9270,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n  border-bottom: 2px solid #e6ecf0;\n}\n.post-container[data-v-d2e5ef7c] {\n  width: 100%;\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 1rem;\n}\n.post__footer--item[data-v-d2e5ef7c] {\n  cursor: pointer;\n  display: flex;\n  align-items: baseline;\n  justify-content: center;\n  gap: 0.3rem;\n  font-size: 0.8rem;\n}\n.post__footer--item[data-v-d2e5ef7c]:hover {\n  color: #50B7F5FF;\n}\n@media (max-width: 400px) {\n.post__body--media[data-v-d2e5ef7c] {\n    width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n    height: 100%;\n    width: 100%;\n    border-radius: 20px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n    padding: 1rem;\n    display: flex;\n    justify-content: center;\n    gap: 1rem;\n}\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* post styling */\n.post[data-v-d2e5ef7c] {\n  width: 100%;\n  display: flex;\n  padding: 1rem;\n  align-items: baseline;\n  flex-direction: column;\n  margin: auto;\n  border-bottom: 2px solid #e6ecf0;\n}\n.post-container[data-v-d2e5ef7c] {\n  width: 100%;\n  max-width: 400px;\n  margin: auto;\n}\n.post[data-v-d2e5ef7c]:hover {\n  background-color: #e6ecf0;\n}\n.post--header__author[data-v-d2e5ef7c] {\n  font-weight: 600;\n  font-size: 0.8rem;\n  color: gray;\n}\n.post--header__author h2[data-v-d2e5ef7c] {\n  font-size: 1.3rem;\n}\n.post--header__author h2 span[data-v-d2e5ef7c] {\n  font-size: 0.7rem;\n  color: #50B7F5FF;\n}\n.post--header__author h2 .delete[data-v-d2e5ef7c] {\n  color: darkred;\n  cursor: pointer;\n}\n.post--header__author h2 .edit[data-v-d2e5ef7c] {\n  color: #38c172;\n  cursor: pointer;\n}\n.post--header--description[data-v-d2e5ef7c] {\n  margin-bottom: 5px;\n  font-size: 12px;\n}\n.post__body--media[data-v-d2e5ef7c] {\n  width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n  height: 100%;\n  width: 400px;\n  border-radius: 20px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n  padding: 1rem;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 1rem;\n}\n.post__footer--item[data-v-d2e5ef7c] {\n  cursor: pointer;\n  display: flex;\n  align-items: baseline;\n  justify-content: center;\n  gap: 0.3rem;\n  font-size: 0.8rem;\n}\n.post__footer--item[data-v-d2e5ef7c]:hover {\n  color: #50B7F5FF;\n}\n@media (max-width: 400px) {\n.post__body--media[data-v-d2e5ef7c] {\n    width: 100%;\n}\n.post__body--media img[data-v-d2e5ef7c] {\n    height: 100%;\n    width: 100%;\n    border-radius: 20px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.post__footer[data-v-d2e5ef7c] {\n    padding: 1rem;\n    display: flex;\n    gap: 1rem;\n}\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -66658,8 +66728,38 @@ var render = function() {
       _c("div", { staticClass: "post--header" }, [
         _c("div", { staticClass: "post--header__author" }, [
           _c("h2", [
-            _vm._v(_vm._s(_vm.item.user.name) + " "),
-            _c("span", [_vm._v("@somethgoth")])
+            _vm._v(_vm._s(_vm.item.user.name) + "\n                    "),
+            _c("span", [_vm._v(_vm._s(_vm.userName))]),
+            _vm._v(" "),
+            _vm.item.user.id === this.$store.getters["currentUser/user"].id
+              ? _c(
+                  "span",
+                  {
+                    staticClass: "delete",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("postDelete", _vm.item.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-trash-alt" })]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.item.user.id === this.$store.getters["currentUser/user"].id
+              ? _c(
+                  "span",
+                  {
+                    staticClass: "edit",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("postEdit", _vm.item.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-pen-nib" })]
+                )
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -67669,6 +67769,23 @@ var render = function() {
     "div",
     { attrs: { id: "home" } },
     [
+      _c(
+        "Modal",
+        {
+          attrs: { noCreate: 1, title: "Opps something went wrong" },
+          on: {
+            closeModal: function($event) {
+              _vm.show = false
+            }
+          }
+        },
+        [
+          _c("h3", [
+            _vm._v("We couldn't process your request please try again later :(")
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _c("TweetBox", { on: { newPostCreated: _vm.handleNewPostCreated } }),
       _vm._v(" "),
       _vm.loading
@@ -67678,24 +67795,12 @@ var render = function() {
             _vm._l(_vm.posts, function(item, index) {
               return _c("PostItem", {
                 key: "post" + index,
-                attrs: { item: item }
+                attrs: { item: item },
+                on: { postDelete: _vm.handlePostDelete }
               })
             }),
             1
-          ),
-      _vm._v(" "),
-      _c(
-        "Modal",
-        {
-          attrs: { title: "Login form" },
-          on: {
-            "hide-modal": function($event) {
-              _vm.show = false
-            }
-          }
-        },
-        [_c("h1", [_vm._v("Hello")])]
-      )
+          )
     ],
     1
   )
