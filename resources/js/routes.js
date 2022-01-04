@@ -3,9 +3,9 @@ import Home from "./views/home/Home";
 import Post from "./views/post/Post";
 import Login from "./components/Auth/Login";
 import Policy from "./components/Policy/Policy";
-import Profile from "./components/Profile/Profile";
 import Register from "./components/Auth/Register";
 import {auth, notAuth} from "./components/Shared/util/auth";
+import Profile from "./views/profile/Profile";
 
 const routes = [
     {

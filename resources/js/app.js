@@ -25,6 +25,14 @@ Vue.mixin({
         },
         getUsername(email) {
             return email.split('@')[0];
+        },
+        isImage(image){
+            console.log(image.name)
+          if (/\.(jpe?g|png|gif|webp)$/i.test( image.name ))  {
+              console.log('passed')
+              return true;
+          }
+          return false;
         }
     }
 });

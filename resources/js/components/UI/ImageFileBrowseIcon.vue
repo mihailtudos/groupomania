@@ -5,7 +5,7 @@
                 cursor: pointer;`"
            class="far fa-image"
            @click="openFileOption"></i>
-        <input type="file" id="image" style="display:none">
+        <input @change="onFileChange" type="file" id="image" style="display:none">
     </div>
 </template>
 
@@ -15,6 +15,13 @@ export default {
     methods: {
         openFileOption() {
             document.getElementById("image").click();
+        },
+        onFileChange(event) {
+           if (this.isImage(event.target.files[0])) {
+               this.$emit('imageUploaded', event.target.files[0]);
+               return 1;
+           }
+           throw new Error('Incorrect data format');
         }
     },
     props: {

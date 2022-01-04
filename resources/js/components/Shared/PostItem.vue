@@ -6,13 +6,13 @@
                     <h2>{{ item.user.name }} <span>@somethgoth</span></h2>
                 </div>
                 <div class="post__header--description">
-                    <p v-if=" item.excerpt.length <= 100">{{ item.excerpt }}</p>
+                    <p v-if="item.excerpt.length <= 100">{{ item.excerpt }}</p>
                     <p  v-else>{{ item.excerpt.slice(0, 100) + '...' }} <router-link :to="{name: 'post', params: {id: this.item.id, post: this.item }}" style="color: #50b7f5;">read more</router-link></p>
                 </div>
             </div>
             <div class="post__body">
-                <div class="post__body--media">
-                    <img width="400px" height="100%" src="/images/post-default.webp" alt="test">
+                <div  class="post__body--media">
+                    <img v-if="item.image" width="400px" height="100%" :src="item.image" alt="A random image uploaded by the users of the intra-network">
                 </div>
                 <div class="post__footer">
                     <Like @like="handleLikeEvent" :can-like="canLike(user.id)" :likes="item.likes.length" />
@@ -108,6 +108,7 @@ $twitter-background: #e6ecf0;
     margin: auto;
     border-bottom: 2px solid $twitter-background;
     &-container {
+        width: 100%;
         max-width: 400px;
         margin: auto;
     }

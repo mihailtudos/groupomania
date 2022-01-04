@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div style="color: red" class="invalid-feedback" v-for="(error, index) in errors" :key="key(index)">{{ error }}</div>
+        <div style="color: red; font-size: .7rem" class="invalid-feedback" v-for="(error, index) in errors" :key="key(index)">{{ error }}</div>
     </div>
 </template>
 

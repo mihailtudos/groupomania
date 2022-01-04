@@ -3,7 +3,7 @@
             <span class="material-icons icon">
                 <i class="fas fa-search"></i>
             </span>
-        <input type="text" placeholder="Search Twitter">
+        <input type="text" placeholder="Search..." >
     </div>
 </template>
 

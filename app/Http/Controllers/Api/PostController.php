@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    use UploadTrait;
     /**
      * Display a listing of the resource.
      *
@@ -34,11 +36,45 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        return Post::create($request->validate([
-                'title' => ['required', 'min: 10', 'max: 200', 'string'],
-                'slug' => ['required']
-            ])
-        );
+
+        $validatedData = $request->validate([
+            'excerpt' => ['required', 'min:15', 'max: 160'],
+        ]);
+
+        $filePath = '';
+
+        // ensure the request has a file before we attempt anything else.
+        if ($request->has('image') and $request->image) {
+            $request->validate([
+                'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
+            ]);
+
+            // Get image file
+            $image = $request->file('image');
+
+            //image name
+            $name = time();
+
+            // Define folder path
+            $folder = '/uploads/posts/';
+
+            // Make a file path where image will be stored [ folder path + file name + file extension]
+            $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
+
+            // Upload image
+            $this->uploadOne($image, $folder, 'public', $name);
+        }
+
+
+        $post = auth()->user()->posts()->create([
+            'excerpt' => $validatedData['excerpt'],
+            'image' => $filePath,
+            'likes' => json_encode([]),
+            'dislikes' => json_encode([]),
+        ]);
+
+        return response()->json($post);
+
     }
 
     /**

@@ -25,7 +25,7 @@
                 </span>
                 <h2>Messages</h2>
             </div>
-            <router-link :to="{ name: 'profile', params: {id: user.id } }" class="sidebar--option">
+            <router-link v-if="user.id" :to="{name:'profile', params:{id: user.id} }" class="sidebar--option">
                 <span class="material-icons">
                     <i class="fas fa-id-badge"></i>
                 </span>

@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
+    //ensures the user is logged in
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
