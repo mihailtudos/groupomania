@@ -2975,6 +2975,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _UI_ImageFileBrowseIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/ImageFileBrowseIcon */ "./resources/js/components/UI/ImageFileBrowseIcon.vue");
 /* harmony import */ var _mixins_validationErrors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Modal */ "./resources/js/components/Shared/Modal.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3008,17 +3009,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TweetBox",
   mixins: [_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_2__["default"]],
   components: {
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_3__["default"],
     ImageFileBrowseIcon: _UI_ImageFileBrowseIcon__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       max: 160,
+      loading: false,
+      show: false,
       dataForm: {
         excerpt: '',
         image: ''
@@ -3026,21 +3034,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    submitForm: function submitForm() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+    submitForm: function () {
+      var _submitForm = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var formData, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!(_this.dataForm.excerpt.length < 15)) {
+                if (!(this.dataForm.excerpt.length < 15)) {
                   _context.next = 3;
                   break;
                 }
 
-                _this.errors = {
+                this.errors = {
                   excerpt: ['Tweet content must be at least 15 characters long']
                 };
                 return _context.abrupt("return");
@@ -3048,33 +3054,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 3:
                 formData = new FormData();
 
-                if (_this.dataForm.image) {
-                  formData.append("image", _this.dataForm.image);
+                if (this.dataForm.image) {
+                  formData.append("image", this.dataForm.image);
                 }
 
-                formData.append("excerpt", _this.dataForm.excerpt);
+                formData.append("excerpt", this.dataForm.excerpt);
                 _context.prev = 6;
-                _context.next = 9;
+                this.loading = true;
+                _context.next = 10;
                 return axios.post("/api/posts", formData);
 
-              case 9:
+              case 10:
                 response = _context.sent;
-                console.log(response);
-                _context.next = 16;
+
+                if (!(response.status >= 200 && response.status <= 202)) {
+                  _context.next = 16;
+                  break;
+                }
+
+                this.$emit('newPostCreated', response.data);
+                this.resetData();
+                _context.next = 17;
                 break;
 
-              case 13:
-                _context.prev = 13;
-                _context.t0 = _context["catch"](6);
-                _this.errors = _context.t0.response && _context.t0.response.data.errors;
-
               case 16:
+                throw new Error('Something went wrong');
+
+              case 17:
+                this.loading = false;
+                _context.next = 24;
+                break;
+
+              case 20:
+                _context.prev = 20;
+                _context.t0 = _context["catch"](6);
+
+                if (_context.t0.response.status === 422) {
+                  this.errors = _context.t0.response && _context.t0.response.data.errors;
+                } else {
+                  this.show = true;
+                }
+
+                this.loading = false;
+
+              case 24:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[6, 13]]);
-      }))();
+        }, _callee, this, [[6, 20]]);
+      }));
+
+      function submitForm() {
+        return _submitForm.apply(this, arguments);
+      }
+
+      return submitForm;
+    }(),
+    handleCloseModal: function handleCloseModal() {
+      this.resetData();
+    },
+    resetData: function resetData() {
+      this.loading = false, this.show = false, this.dataForm = {
+        excerpt: '',
+        image: ''
+      };
     },
     imageUploadHandler: function imageUploadHandler(file) {
       this.dataForm.image = file;
@@ -3645,6 +3689,11 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function () {
       _this.loading = false;
     });
+  },
+  methods: {
+    handleNewPostCreated: function handleNewPostCreated(post) {
+      this.posts.unshift(post);
+    }
   }
 });
 
@@ -66802,83 +66851,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "tweet-box" }, [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.submitForm.apply(null, arguments)
+  return _c(
+    "div",
+    { staticClass: "tweet-box" },
+    [
+      _c(
+        "Modal",
+        {
+          attrs: { noCreate: 1, title: "Opps something went wrong" },
+          on: { closeModal: _vm.handleCloseModal }
+        },
+        [
+          _c("h3", [
+            _vm._v("We couldn't process your request please try again later :(")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submitForm.apply(null, arguments)
+            }
           }
-        }
-      },
-      [
-        _c("div", { staticClass: "input--group" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "input--group__input" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.dataForm.excerpt,
-                  expression: "dataForm.excerpt"
-                }
-              ],
-              attrs: {
-                maxlength: _vm.max,
-                name: "excerpt",
-                id: "excerpt",
-                type: "text",
-                placeholder: "What's happening?"
-              },
-              domProps: { value: _vm.dataForm.excerpt },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.dataForm, "excerpt", $event.target.value)
-                }
-              }
-            }),
+        },
+        [
+          _c("div", { staticClass: "input--group" }, [
+            _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "details" }, [
-              _c(
-                "span",
-                [_c("v-error", { attrs: { errors: _vm.errorFor("excerpt") } })],
-                1
-              ),
+            _c("div", { staticClass: "input--group__input" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.dataForm.excerpt,
+                    expression: "dataForm.excerpt"
+                  }
+                ],
+                attrs: {
+                  maxlength: _vm.max,
+                  name: "excerpt",
+                  id: "excerpt",
+                  type: "text",
+                  placeholder: "What's happening?"
+                },
+                domProps: { value: _vm.dataForm.excerpt },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.dataForm, "excerpt", $event.target.value)
+                  }
+                }
+              }),
               _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(_vm.max - _vm.dataForm.excerpt.length) +
-                    "\n                    "
-                )
+              _c("div", { staticClass: "details" }, [
+                _c(
+                  "span",
+                  [
+                    _c("v-error", {
+                      attrs: { errors: _vm.errorFor("excerpt") }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("span", [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.max - _vm.dataForm.excerpt.length) +
+                      "\n                    "
+                  )
+                ])
               ])
             ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "footer" },
-          [
-            _c("ImageFileBrowseIcon", {
-              attrs: { size: "20" },
-              on: { imageUploaded: _vm.imageUploadHandler }
-            }),
-            _vm._v(" "),
-            _c("button", { staticClass: "tweet-button" }, [_vm._v("Tweet")])
-          ],
-          1
-        )
-      ]
-    )
-  ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "footer" },
+            [
+              _c("ImageFileBrowseIcon", {
+                attrs: { size: "20" },
+                on: { imageUploaded: _vm.imageUploadHandler }
+              }),
+              _vm._v(" "),
+              _c("button", { staticClass: "tweet-button" }, [_vm._v("Tweet")])
+            ],
+            1
+          )
+        ]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -67598,7 +67669,7 @@ var render = function() {
     "div",
     { attrs: { id: "home" } },
     [
-      _c("TweetBox"),
+      _c("TweetBox", { on: { newPostCreated: _vm.handleNewPostCreated } }),
       _vm._v(" "),
       _vm.loading
         ? _c("LoadingContainer")
@@ -67672,14 +67743,16 @@ var render = function() {
       !_vm.loading
         ? _c("div", [
             _c("div", { staticClass: "post--description" }, [
-              _c("img", {
-                attrs: {
-                  width: "400px",
-                  height: "100%",
-                  src: "/images/post-default.webp",
-                  alt: "test"
-                }
-              }),
+              _vm.post.image
+                ? _c("img", {
+                    attrs: {
+                      width: "400px",
+                      height: "100%",
+                      src: _vm.post.image,
+                      alt: "test"
+                    }
+                  })
+                : _vm._e(),
               _vm._v(" "),
               _vm.post ? _c("p", [_vm._v(_vm._s(_vm.post.excerpt))]) : _vm._e(),
               _vm._v(" "),

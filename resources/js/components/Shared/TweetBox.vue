@@ -1,5 +1,8 @@
 <template>
     <div class="tweet-box">
+        <Modal @closeModal="handleCloseModal" :noCreate="1" title="Opps something went wrong">
+            <h3>We couldn't process your request please try again later :(</h3>
+        </Modal>
         <form @submit.prevent="submitForm">
             <div class="input--group">
                     <span class="material-icons">
@@ -28,13 +31,16 @@
 <script>
 import ImageFileBrowseIcon from "../UI/ImageFileBrowseIcon";
 import validationErrors from "./mixins/validationErrors";
+import Modal from "./Modal";
 export default {
     name: "TweetBox",
     mixins: [validationErrors],
-    components: {ImageFileBrowseIcon},
+    components: {Modal, ImageFileBrowseIcon},
     data() {
         return {
             max: 160,
+            loading: false,
+            show: false,
             dataForm: {
                 excerpt: '',
                 image: ''
@@ -42,7 +48,7 @@ export default {
         }
     },
     methods: {
-        async submitForm() {
+        submitForm: async function () {
             if (this.dataForm.excerpt.length < 15) {
                 this.errors = {
                     excerpt: ['Tweet content must be at least 15 characters long']
@@ -55,10 +61,33 @@ export default {
             }
             formData.append("excerpt", this.dataForm.excerpt);
             try {
+                this.loading = true;
                 const response = (await axios.post(`/api/posts`, formData));
-                console.log(response)
+                if (response.status >= 200 && response.status <= 202) {
+                    this.$emit('newPostCreated', response.data);
+                    this.resetData();
+                } else {
+                    throw new Error('Something went wrong')
+                }
+                this.loading = false;
             } catch (error) {
-                this.errors = error.response && error.response.data.errors;
+                if (error.response.status === 422) {
+                    this.errors = error.response && error.response.data.errors;
+                } else {
+                    this.show = true;
+                }
+                this.loading = false;
+            }
+        },
+        handleCloseModal() {
+          this.resetData();
+        },
+        resetData() {
+            this.loading = false,
+            this.show = false,
+            this.dataForm = {
+                excerpt: '',
+                image: ''
             }
         },
         imageUploadHandler(file) {

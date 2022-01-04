@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <TweetBox />
+        <TweetBox @newPostCreated="handleNewPostCreated"/>
         <LoadingContainer v-if="loading" />
         <div v-else>
             <PostItem
@@ -49,6 +49,11 @@ export default {
         .then(() => {
            this.loading = false;
         });
+    },
+    methods: {
+        handleNewPostCreated(post) {
+            this.posts.unshift(post);
+        }
     }
 }
 </script>

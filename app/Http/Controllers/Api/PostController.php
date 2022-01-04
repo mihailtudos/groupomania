@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    //ensures the user is logged in
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     use UploadTrait;
     /**
      * Display a listing of the resource.
@@ -32,7 +38,7 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -73,8 +79,10 @@ class PostController extends Controller
             'dislikes' => json_encode([]),
         ]);
 
+        $post = Post::with(['user', 'comments'])->where('id', $post->id)->first();
+        $post->likes = json_decode('[]');
+        $post->dislikes = json_decode('[]');
         return response()->json($post);
-
     }
 
     /**

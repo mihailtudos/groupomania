@@ -5,7 +5,7 @@
         </Modal>
         <div v-if="!loading">
             <div class="post--description">
-                <img width="400px" height="100%" src="/images/post-default.webp" alt="test">
+                <img v-if="post.image" width="400px" height="100%" :src="post.image" alt="test">
                 <p v-if="post">{{ post.excerpt }}</p>
                 <div class="post--description__footer">
                     <p> posted {{ post.created_at | fromNow }} {{'by @' + this.getUsername(post.user.email) }}</p>
