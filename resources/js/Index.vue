@@ -13,7 +13,7 @@
                 </div>
                 <router-view/>
             </div>
-            <Widget/>
+            <Widget />
         </div>
         <div v-else>
             <div class="login-container">

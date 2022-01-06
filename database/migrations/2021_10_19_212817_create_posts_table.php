@@ -15,7 +15,9 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('channel_id');
             $table->string('excerpt');
+            $table->text('body')->nullable();
             $table->foreignId('user_id');
             $table->string('image')->nullable();
             $table->text('likes')->nullable();
@@ -23,6 +25,7 @@ class CreatePostsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('channel_id')->references('id')->on('departments')->onDelete('cascade');
         });
     }
 

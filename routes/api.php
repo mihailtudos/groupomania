@@ -22,6 +22,7 @@ Route::prefix('user')->group(function () {
     Route::get('/current', [\App\Http\Controllers\Api\UserController::class, 'currentUser']);
 });
 Route::apiResource('/posts', PostController::class);
+Route::get('/admin/posts', [PostController::class, 'generalPosts']);
 Route::apiResource('/comments', CommentsController::class)->middleware('auth')->except('index');
 Route::get('/posts/{id}/comments', [PostController::class, 'comments']);
 Route::post('/{id}/likes', LikesHandler::class);

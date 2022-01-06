@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Department;
 use App\Models\Post;
 use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
@@ -22,18 +23,24 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Post[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $posts = Post::with(['user', 'comments'])->latest()->get();
+        $posts = Post::with(['user', 'comments'])->where('channel_id', auth()->user()->id)->latest()->get();
 
         foreach ($posts as $post) {
             $post->likes = json_decode($post->likes);
             $post->dislikes = json_decode($post->dislikes);
         }
 
-        return $posts;
+        return response()->json($posts);
+    }
+
+    public function generalPosts() {
+        $public = Department::where('name', 'public')->first();
+        $posts = Post::with(['user', 'comments'])->where('channel_id', $public->id)->latest()->get();
+        return response()->json($posts);
     }
 
     /**
@@ -77,6 +84,7 @@ class PostController extends Controller
         $post = auth()->user()->posts()->create([
             'excerpt' => $validatedData['excerpt'],
             'image' => $filePath,
+            'channel_id' => auth()->user()->department->id,
             'likes' => json_encode([]),
             'dislikes' => json_encode([]),
         ]);

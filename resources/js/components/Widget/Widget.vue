@@ -1,25 +1,49 @@
 <template>
     <div class="widgets">
         <SearchBar />
-        <div class="widgets--container">
-            <h2>What's happening?</h2>
-            <blockquote class="twitter-tweet">
-                <p lang="en" dir="ltr">Sunsets don&#39;t get much better than this one over <a
-                    href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw">@GrandTetonNPS</a>. <a
-                    href="https://twitter.com/hashtag/nature?src=hash&amp;ref_src=twsrc%5Etfw">#nature</a> <a
-                    href="https://twitter.com/hashtag/sunset?src=hash&amp;ref_src=twsrc%5Etfw">#sunset</a> <a
-                    href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a></p>&mdash; US Department of the Interior
-                (@Interior) <a href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw">May 5, 2014</a>
-            </blockquote>
+       <div v-if="loading">
+           <loading-container/>
+       </div>
+        <div v-else>
+            <div class="widgets--container">
+                <h2>What's happening?</h2>
+                <blockquote v-for="(post, index) in posts" :key="index" class="twitter-tweet">
+                    <p v-html="post.excerpt"></p>
+                    <span style="display: flex; justify-content: flex-end">
+                        <router-link :to="{ name: 'announcement', params: { id: post.id} }">read more...</router-link>
+                    </span>
+                </blockquote>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import SearchBar from "../Shared/SearchBar";
+import LoadingContainer from "../Shared/LoadingContainer";
 export default {
     name: "Widget",
-    components: {SearchBar}
+    data() {
+      return {
+          posts: [],
+          loading: [],
+          errors: null
+      }
+    },
+    components: {LoadingContainer, SearchBar},
+    created() {
+        this.loading = true;
+        axios.get('/api/admin/posts')
+            .then(response => {
+                this.posts = response.data
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            })
+            .then(() => {
+                this.loading = false;
+            });
+    },
 }
 </script>
 
@@ -28,16 +52,30 @@ $twitter-color: #50b7f5;
 $twitter-background: #e6ecf0;
 
 .widgets {
-    flex: 0.2;
+    width: 100%;
+    flex: 0.2!important;
+    min-width: 300px;
     margin-left: 20px;
     &--container {
         margin-top: 15px;
-        padding: 20px;
+        padding: .5rem;
         background-color: #f5f8fa;
         border-radius: 20px;
         h2 {
             font-size: 18px;
             font-weight: 800;
+        }
+        blockquote {
+            padding: 1rem;
+            font-weight: 200;
+            margin: 0;
+            border-bottom: 2px solid $twitter-color;
+            a {
+                font-weight: bold;
+                font-size: .8rem;
+                color: $twitter-color;
+                text-align: right;
+            }
         }
     }
 }

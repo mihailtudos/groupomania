@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'department_id',
     ];
 
     /**
@@ -47,8 +48,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function departments(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsToMany(Department::class);
+        return $this->belongsTo(Department::class);
     }
 }

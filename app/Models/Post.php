@@ -9,7 +9,7 @@ class Post extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'excerpt', 'user_id', 'image', 'likes', 'dislikes'
+        'excerpt', 'user_id', 'image', 'likes', 'dislikes', 'channel_id'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

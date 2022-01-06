@@ -6,6 +6,7 @@ import Policy from "./components/Policy/Policy";
 import Register from "./components/Auth/Register";
 import {auth, notAuth} from "./components/Shared/util/auth";
 import Profile from "./views/profile/Profile";
+import Announcement from "./views/Announcement/Announcement";
 
 const routes = [
     {
@@ -21,6 +22,11 @@ const routes = [
         path: "/post/:id",
         component: Post,
         name: "post",
+    },
+    {
+        path: "/announcement/:id",
+        component: Announcement,
+        name: "announcement",
     },
     {
         path: "/auth/login",

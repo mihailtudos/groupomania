@@ -8,6 +8,7 @@
         <div v-else>
             <PostItem
                 @postDelete="handlePostDelete"
+                @postUpdate="handlePostUpdate"
                 v-for="(item, index) in posts"
                 :key="'post'+index"
                 :item="item"/>
@@ -66,6 +67,9 @@ export default {
             } catch (error) {
                 this.show = true;
             }
+        },
+        handlePostUpdate(id) {
+
         },
         updatePostsList(id, action) {
             if (action === 'edited') {
