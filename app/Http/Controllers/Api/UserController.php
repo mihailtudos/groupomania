@@ -89,4 +89,24 @@ class UserController extends Controller
     {
         //
     }
+
+    public function updatePassword(Request $request) {
+        $user = auth()->user();
+        $data = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'confirmed']
+        ]);
+
+        if (password_verify( $data['current_password'], $user->password)) {
+            $response = $user->update([
+                'password' => bcrypt($data['password']),
+            ]);
+
+            if ($response) {
+                return response()->noContent();
+            }
+        }
+
+        return response('', 404);
+    }
 }

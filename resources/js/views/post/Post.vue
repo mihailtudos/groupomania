@@ -131,7 +131,6 @@ export default {
                    this.updateComments(id, 'deleted')
                }
            } catch (error) {
-               console.log(id)
                 this.show = true;
            }
         },

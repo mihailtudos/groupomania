@@ -2969,18 +2969,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3862,13 +3850,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Explore",
+  data: function data() {
+    return {
+      posts: []
+    };
+  },
   components: {
     PublicPost: _components_Shared_PublicPost__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  computed: {
-    posts: function posts() {
-      return this.$store.getters["explorePosts/posts"];
-    }
   }
 });
 
@@ -4231,16 +4219,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this3.updateComments(id, 'deleted');
                 }
 
-                _context2.next = 11;
+                _context2.next = 10;
                 break;
 
               case 7:
                 _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
-                console.log(id);
                 _this3.show = true;
 
-              case 11:
+              case 10:
               case "end":
                 return _context2.stop();
             }
@@ -4375,7 +4362,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Shared/mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Shared/mixins/validationErrors */ "./resources/js/components/Shared/mixins/validationErrors.js");
+/* harmony import */ var _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Shared/Modal */ "./resources/js/components/Shared/Modal.vue");
+/* harmony import */ var _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Shared/LoadingContainer */ "./resources/js/components/Shared/LoadingContainer.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4456,19 +4458,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Profile",
-  mixins: [_components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  components: {
+    LoadingContainer: _components_Shared_LoadingContainer__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Modal: _components_Shared_Modal__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  mixins: [_components_Shared_mixins_validationErrors__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
+      loading: false,
+      show: false,
+      success: false,
+      profile: '',
       formData: {
-        password: null,
-        password_confirmation: null,
-        current_password: null
+        password: '',
+        password_confirmation: '',
+        current_password: ''
       }
     };
   },
   methods: {
+    handleCloseModal: function handleCloseModal() {
+      this.formData = {
+        password: '',
+        password_confirmation: '',
+        current_password: ''
+      };
+      this.show = false;
+    },
     handleTabClick: function handleTabClick(id) {
       var options = document.querySelectorAll('.profile--body__option');
       var tabs = document.querySelectorAll('.profile--body__controls li');
@@ -4486,7 +4506,117 @@ __webpack_require__.r(__webpack_exports__);
           tab.classList.add('active');
         }
       });
+    },
+    updatePassword: function updatePassword() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.loading = true;
+                _this.errors = null;
+
+                if (!(_this.formData.current_password.length >= 6 && _this.formData.password.length >= 6 && _this.formData.password_confirmation === _this.formData.password && _this.formData.password === _this.formData.current_password)) {
+                  _context.next = 23;
+                  break;
+                }
+
+                _context.prev = 3;
+                _context.next = 6;
+                return axios.post('/api/users/password', {
+                  current_password: _this.formData.current_password,
+                  password: _this.formData.password,
+                  password_confirmation: _this.formData.password_confirmation
+                });
+
+              case 6:
+                response = _context.sent;
+                _this.loading = false;
+
+                if (!(response.status === 204)) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _this.show = true;
+                _this.success = true;
+                _context.next = 14;
+                break;
+
+              case 13:
+                throw new Error('Something went wrong');
+
+              case 14:
+                _context.next = 21;
+                break;
+
+              case 16:
+                _context.prev = 16;
+                _context.t0 = _context["catch"](3);
+                _this.success = false;
+                _this.show = true;
+
+                if (_context.t0.response.status === 422) {
+                  _this.errors = _context.t0.response.errors;
+                }
+
+              case 21:
+                _context.next = 25;
+                break;
+
+              case 23:
+                _this.loading = false;
+                _this.errors = {
+                  passwords: ['Entered passwords don\'t match']
+                };
+
+              case 25:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[3, 16]]);
+      }))();
     }
+  },
+  created: function created() {
+    var _this2 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _this2.loading = true;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return axios.post('/api/profiles/', {
+                userId: _this2.$route.params.id
+              });
+
+            case 4:
+              _this2.profile = _context2.sent.data;
+              console.log(_this2.profile);
+              _context2.next = 10;
+              break;
+
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](1);
+
+            case 10:
+              _this2.loading = false;
+
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 8]]);
+    }))();
   }
 });
 
@@ -10038,7 +10168,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#profile[data-v-97ebee18] {\n  margin: 2rem 0;\n  display: flex;\n  gap: 2rem;\n  flex-direction: column;\n  align-items: center;\n  justify-content: space-between;\n}\n#profile .profile[data-v-97ebee18] {\n  width: 100%;\n}\n#profile .profile--header h1[data-v-97ebee18] {\n  font-size: 1.3rem;\n  width: 100%;\n  text-align: center;\n  margin: auto;\n}\n#profile .profile--header h1 span[data-v-97ebee18] {\n  color: #50b7f5;\n}\n#profile .profile--body[data-v-97ebee18] {\n  width: 100%;\n  margin: 2rem auto;\n  display: flex;\n  gap: 1rem;\n  padding: 0.5rem;\n}\n#profile .profile--body__controls[data-v-97ebee18] {\n  flex: 1;\n}\n#profile .profile--body__controls ul[data-v-97ebee18] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#profile .profile--body__controls ul li[data-v-97ebee18] {\n  font-weight: bold;\n  cursor: pointer;\n  padding: 0.5rem 2rem 0.5rem 0.5rem;\n  margin: 0.5rem;\n  letter-spacing: 1px;\n}\n#profile .profile--body__controls ul li[data-v-97ebee18]:hover {\n  border-bottom: 2px solid #50b7f5;\n}\n#profile .profile--body__controls ul li.active[data-v-97ebee18] {\n  border-bottom: 2px solid #50b7f5;\n  background: #50b7f5;\n}\n#profile .profile--body__option[data-v-97ebee18] {\n  flex: 3;\n  display: none;\n}\n#profile .profile--body__option.active[data-v-97ebee18] {\n  display: block;\n}\n#profile .profile--body__option .form-group[data-v-97ebee18] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#profile .profile--body__option .form-group input[data-v-97ebee18] {\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  border: 2px solid #1a202c;\n  font-size: 1rem;\n  border-radius: 5px;\n}\n#profile .profile--body__option .form-group input.is-invalid[data-v-97ebee18] {\n  border-color: red;\n}\n@media (max-width: 450px) {\n#profile .profile--body__option[data-v-97ebee18] {\n    flex-direction: column;\n}\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#profile[data-v-97ebee18] {\n  margin: 2rem 0;\n  display: flex;\n  gap: 2rem;\n  flex-direction: column;\n  align-items: center;\n  justify-content: space-between;\n}\n#profile .profile[data-v-97ebee18] {\n  width: 100%;\n}\n#profile .profile--header h1[data-v-97ebee18] {\n  font-size: 1.3rem;\n  width: 100%;\n  text-align: center;\n  margin: auto;\n}\n#profile .profile--header h1 span[data-v-97ebee18] {\n  color: #50b7f5;\n}\n#profile .profile--body[data-v-97ebee18] {\n  width: 100%;\n  margin: 2rem auto;\n  display: flex;\n  gap: 1rem;\n  padding: 0.5rem;\n}\n#profile .profile--body__controls[data-v-97ebee18] {\n  flex: 1;\n}\n#profile .profile--body__controls ul[data-v-97ebee18] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#profile .profile--body__controls ul li[data-v-97ebee18] {\n  font-weight: bold;\n  cursor: pointer;\n  padding: 0.5rem 2rem 0.5rem 0.5rem;\n  margin: 0.5rem;\n  letter-spacing: 1px;\n}\n#profile .profile--body__controls ul li[data-v-97ebee18]:hover {\n  border-bottom: 2px solid #50b7f5;\n}\n#profile .profile--body__controls ul li.active[data-v-97ebee18] {\n  border-bottom: 2px solid #50b7f5;\n  background: #50b7f5;\n}\n#profile .profile--body__option[data-v-97ebee18] {\n  flex: 3;\n  display: none;\n}\n#profile .profile--body__option.active[data-v-97ebee18] {\n  display: block;\n}\n#profile .profile--body__option .form-group[data-v-97ebee18] {\n  margin-bottom: 0.3rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n#profile .profile--body__option .form-group input[data-v-97ebee18] {\n  width: 100%;\n  padding: 0.5rem 0.2rem;\n  border: 2px solid #1a202c;\n  font-size: 1rem;\n  border-radius: 5px;\n}\n#profile .profile--body__option .form-group input.is-invalid[data-v-97ebee18] {\n  border-color: red;\n}\n#profile .profile--body__option ul[data-v-97ebee18] {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#profile .profile--body__option ul li[data-v-97ebee18] {\n  margin-bottom: 0.5rem;\n}\n#profile .profile--body__option ul li strong[data-v-97ebee18] {\n  color: #50b7f5;\n}\n@media (max-width: 750px) {\n#profile .profile--body[data-v-97ebee18] {\n    flex-direction: column;\n}\n#profile .profile--body__controls ul li[data-v-97ebee18] {\n    margin: 0 0 0.5rem 0;\n}\n}\n@media (max-width: 450px) {\n#profile .profile--body__option[data-v-97ebee18] {\n    flex-direction: column;\n}\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10062,7 +10192,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -67618,42 +67748,7 @@ var render = function() {
   return _c("div", { staticClass: "post" }, [
     _c("div", { staticClass: "post-container" }, [
       _c("div", { staticClass: "post--header" }, [
-        _c("div", { staticClass: "post--header__author" }, [
-          _c("h2", [
-            _vm._v(_vm._s(_vm.item.user.name) + "\n                        "),
-            _c("span", [_vm._v(_vm._s(_vm.userName))]),
-            _vm._v(" "),
-            _vm.item.user.id === this.$store.getters["currentUser/user"].id
-              ? _c(
-                  "span",
-                  {
-                    staticClass: "delete",
-                    on: {
-                      click: function($event) {
-                        return _vm.$emit("postDelete", _vm.item.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "fas fa-trash-alt" })]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.item.user.id === this.$store.getters["currentUser/user"].id
-              ? _c(
-                  "span",
-                  {
-                    staticClass: "edit",
-                    on: {
-                      click: function($event) {
-                        return _vm.$emit("postEdit", _vm.item.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "fas fa-pen-nib" })]
-                )
-              : _vm._e()
-          ])
-        ]),
+        _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "post__header--description" }, [
           _c("p", { domProps: { innerHTML: _vm._s(_vm.item.excerpt) } })
@@ -67673,37 +67768,21 @@ var render = function() {
                 }
               })
             : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "post__footer" },
-          [
-            _c("Like", {
-              attrs: {
-                "can-like": _vm.canLike(_vm.user.id),
-                likes: _vm.item.likes.length
-              },
-              on: { like: _vm.handleLikeEvent }
-            }),
-            _vm._v(" "),
-            _c("Dislike", {
-              attrs: {
-                "can-dislike": _vm.canDislike(_vm.user.id),
-                dislikes: _vm.item.dislikes.length
-              },
-              on: { dislike: _vm.handleDislikeEvent }
-            }),
-            _vm._v(" "),
-            _c("div")
-          ],
-          1
-        )
+        ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "post--header__author" }, [
+      _c("h2", [_vm._v(" Groupomania Administration")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -68669,8 +68748,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.posts, function(post) {
-      return _c("div", [_c("PublicPost", { attrs: { item: post } })], 1)
+    _vm._l(this.$store.getters["explorePosts/posts"], function(post, index) {
+      return _c(
+        "div",
+        [
+          _c("PublicPost", { key: "publicPost" + index, attrs: { item: post } })
+        ],
+        1
+      )
     }),
     0
   )
@@ -68986,295 +69071,337 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "profile" } }, [
-    _c("div", { staticClass: "profile" }, [
-      _c("div", { staticClass: "profile--header" }, [
-        _c("h1", [
-          _vm._v("Welcome to your profile "),
-          _c("br"),
-          _c("span", [
-            _vm._v(_vm._s(this.$store.getters["currentUser/user"].name))
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "profile--body" }, [
-        _c("div", { staticClass: "profile--body__controls" }, [
-          _c("ul", [
-            _c(
-              "li",
-              {
-                staticClass: "active",
-                attrs: { "aria-label": "account" },
-                on: {
-                  click: function($event) {
-                    return _vm.handleTabClick("account")
-                  }
-                }
-              },
-              [_vm._v("account")]
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              {
-                attrs: { "aria-label": "channel" },
-                on: {
-                  click: function($event) {
-                    return _vm.handleTabClick("channel")
-                  }
-                }
-              },
-              [_vm._v("channels")]
-            )
-          ])
-        ]),
-        _vm._v(" "),
+  return !_vm.loading
+    ? _c("div", [
         _c(
           "div",
-          {
-            staticClass: "profile--body__option active",
-            attrs: { id: "account" }
-          },
+          { attrs: { id: "profile" } },
           [
-            _c("h2", [_vm._v("Update password")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c(
-                  "label",
+            _vm.success
+              ? _c(
+                  "Modal",
                   {
-                    staticClass: "col-md-4 col-form-label text-md-right",
-                    attrs: { for: "current_password" }
+                    attrs: { noCreate: 1, title: "Success" },
+                    on: { closeModal: _vm.handleCloseModal }
                   },
-                  [_vm._v(" Current password ")]
+                  [_c("p", [_vm._v("Password updated successfully!")])]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.success
+              ? _c(
+                  "Modal",
+                  {
+                    attrs: { noCreate: 1, title: "Fail" },
+                    on: { closeModal: _vm.handleCloseModal }
+                  },
+                  [
+                    _c("p", [
+                      _vm._v("Something went wrong, please try again later!")
+                    ])
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "profile" }, [
+              _c("div", { staticClass: "profile--header" }, [
+                _c("h1", [
+                  _vm._v("Welcome to your profile "),
+                  _c("br"),
+                  _c("span", [
+                    _vm._v(_vm._s(this.$store.getters["currentUser/user"].name))
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "profile--body" }, [
+                _c("div", { staticClass: "profile--body__controls" }, [
+                  _c("ul", [
+                    _c(
+                      "li",
+                      {
+                        staticClass: "active",
+                        attrs: { "aria-label": "account" },
+                        on: {
+                          click: function($event) {
+                            return _vm.handleTabClick("account")
+                          }
+                        }
+                      },
+                      [_vm._v("account")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        attrs: { "aria-label": "channel" },
+                        on: {
+                          click: function($event) {
+                            return _vm.handleTabClick("channel")
+                          }
+                        }
+                      },
+                      [_vm._v("channels")]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "profile--body__option active",
+                    attrs: { id: "account" }
+                  },
+                  [
+                    _c("h2", [_vm._v("Update password")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "col-md-4 col-form-label text-md-right",
+                            attrs: { for: "current_password" }
+                          },
+                          [_vm._v(" Current password ")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.formData.current_password,
+                              expression: "formData.current_password"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: [
+                            { "is-invalid": _vm.errorFor("current_password") }
+                          ],
+                          attrs: {
+                            id: "current_password",
+                            type: "password",
+                            name: "current_password",
+                            required: ""
+                          },
+                          domProps: { value: _vm.formData.current_password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.formData,
+                                "current_password",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-error", {
+                          attrs: { errors: _vm.errorFor("current_password") }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "col-md-4 col-form-label text-md-right",
+                            attrs: { for: "password" }
+                          },
+                          [_vm._v(" Password ")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.formData.password,
+                              expression: "formData.password"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: [{ "is-invalid": _vm.errorFor("password") }],
+                          attrs: {
+                            id: "password",
+                            type: "password",
+                            name: "password",
+                            required: ""
+                          },
+                          domProps: { value: _vm.formData.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.formData,
+                                "password",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-error", {
+                          attrs: { errors: _vm.errorFor("password") }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "col-md-4 col-form-label text-md-right",
+                            attrs: { for: "password_confirmation" }
+                          },
+                          [_vm._v(" Re-type password ")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.formData.password_confirmation,
+                              expression: "formData.password_confirmation"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: [
+                            {
+                              "is-invalid": _vm.errorFor(
+                                "password_confirmation"
+                              )
+                            }
+                          ],
+                          attrs: {
+                            id: "password_confirmation",
+                            type: "password",
+                            name: "password_confirmation",
+                            required: ""
+                          },
+                          domProps: {
+                            value: _vm.formData.password_confirmation
+                          },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.formData,
+                                "password_confirmation",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-error", {
+                          attrs: {
+                            errors: _vm.errorFor("password_confirmation")
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-error", {
+                          attrs: { errors: _vm.errorFor("passwords") }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticStyle: {
+                          display: "flex",
+                          "justify-content": "flex-end"
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn-secondary",
+                            on: { click: _vm.updatePassword }
+                          },
+                          [_vm._v("update")]
+                        )
+                      ]
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.formData.current_password,
-                      expression: "formData.current_password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: [{ "is-invalid": _vm.errorFor("current_password") }],
-                  attrs: {
-                    id: "current_password",
-                    type: "password",
-                    name: "current_password",
-                    required: ""
+                _c(
+                  "div",
+                  {
+                    staticClass: "profile--body__option",
+                    attrs: { id: "channel" }
                   },
-                  domProps: { value: _vm.formData.current_password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.formData,
-                        "current_password",
-                        $event.target.value
+                  [
+                    _c("h2", [_vm._v("Channels followed")]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Currently you are subscribed to the following channels:"
                       )
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("v-error", {
-                  attrs: { errors: _vm.errorFor("current_password") }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c(
-                  "label",
-                  {
-                    staticClass: "col-md-4 col-form-label text-md-right",
-                    attrs: { for: "password" }
-                  },
-                  [_vm._v(" Password ")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.formData.password,
-                      expression: "formData.password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: [{ "is-invalid": _vm.errorFor("password") }],
-                  attrs: {
-                    id: "password",
-                    type: "password",
-                    name: "password",
-                    required: ""
-                  },
-                  domProps: { value: _vm.formData.password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.formData, "password", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("v-error", { attrs: { errors: _vm.errorFor("password") } })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c(
-                  "label",
-                  {
-                    staticClass: "col-md-4 col-form-label text-md-right",
-                    attrs: { for: "password_confirmation" }
-                  },
-                  [_vm._v(" Re-type password ")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.formData.password_confirmation,
-                      expression: "formData.password_confirmation"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: [
-                    { "is-invalid": _vm.errorFor("password_confirmation") }
-                  ],
-                  attrs: {
-                    id: "password_confirmation",
-                    type: "password",
-                    name: "password_confirmation",
-                    required: ""
-                  },
-                  domProps: { value: _vm.formData.password_confirmation },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.formData,
-                        "password_confirmation",
-                        $event.target.value
-                      )
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("v-error", {
-                  attrs: { errors: _vm.errorFor("password_confirmation") }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm._m(0)
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "profile--body__option", attrs: { id: "channel" } },
-          [
-            _c("h2", [_vm._v("Channels followed")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v("Currently you are subscribed to the following channels:")
-            ]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c(
-                  "label",
-                  {
-                    staticClass: "col-md-4 col-form-label text-md-right",
-                    attrs: { for: "current_password" }
-                  },
-                  [_vm._v(" Current password ")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.formData.current_password,
-                      expression: "formData.current_password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: [{ "is-invalid": _vm.errorFor("current_password") }],
-                  attrs: {
-                    type: "password",
-                    name: "current_password",
-                    required: ""
-                  },
-                  domProps: { value: _vm.formData.current_password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.formData,
-                        "current_password",
-                        $event.target.value
-                      )
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("v-error", {
-                  attrs: { errors: _vm.errorFor("current_password") }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm._m(1)
-          ]
+                    ]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("ul", [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("strong", [_vm._v("@" + _vm._s(_vm.profile))]),
+                        _vm._v(
+                          " - this is the main channel used by your department to share news, information and discussions"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ]
+                )
+              ])
+            ])
+          ],
+          1
         )
       ])
-    ])
-  ])
+    : _c("div", [_c("LoadingContainer")], 1)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticStyle: { display: "flex", "justify-content": "flex-end" } },
-      [_c("button", { staticClass: "btn-secondary" }, [_vm._v("update")])]
-    )
+    return _c("li", [
+      _c("strong", [_vm._v("@public")]),
+      _vm._v(
+        " - a channel that managers uses to share news, announcements and important information"
+      )
+    ])
   },
   function() {
     var _vm = this

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-for="post in posts">
-            <PublicPost :item="post"/>
+        <div v-for="(post, index) in this.$store.getters['explorePosts/posts']">
+            <PublicPost :item="post" :key="'publicPost'+index"/>
         </div>
     </div>
 </template>
@@ -10,14 +10,14 @@
 import PublicPost from "../../components/Shared/PublicPost";
 export default {
     name: "Explore",
+    data() {
+      return {
+          posts: []
+      }
+    },
     components: {
         PublicPost,
     },
-    computed: {
-        posts() {
-            return this.$store.getters["explorePosts/posts"];
-        }
-    }
 }
 </script>
 

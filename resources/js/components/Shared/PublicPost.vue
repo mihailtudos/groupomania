@@ -3,11 +3,7 @@
         <div class="post-container">
             <div class="post--header">
                 <div class="post--header__author">
-                    <h2>{{ item.user.name }}
-                        <span>{{ userName }}</span>
-                        <span v-if="item.user.id === this.$store.getters['currentUser/user'].id" @click="$emit('postDelete', item.id)" class="delete"><i class="fas fa-trash-alt"></i></span>
-                        <span v-if="item.user.id === this.$store.getters['currentUser/user'].id" @click="$emit('postEdit', item.id)" class="edit"><i class="fas fa-pen-nib"></i></span>
-                    </h2>
+                    <h2> Groupomania Administration</h2>
                 </div>
                 <div class="post__header--description">
                     <p v-html="item.excerpt"></p>
@@ -16,14 +12,6 @@
             <div class="post__body">
                 <div  class="post__body--media">
                     <img v-if="item.image" width="400px" height="100%" :src="item.image" alt="A random image uploaded by the users of the intra-network">
-                </div>
-                <div class="post__footer">
-                    <Like @like="handleLikeEvent" :can-like="canLike(user.id)" :likes="item.likes.length" />
-                    <Dislike @dislike="handleDislikeEvent" :can-dislike="canDislike(user.id)" :dislikes="item.dislikes.length"/>
-<!--                    <router-link :to="{ name: 'post', params: {id: this.item.id, post: this.item, hash: '#comments' } }" class="post__footer&#45;&#45;item">-->
-<!--                        <span class="material-icons">comment </span> <span>{{ item.comments.length }}</span>-->
-<!--                    </router-link>-->
-                    <div></div>
                 </div>
             </div>
         </div>
