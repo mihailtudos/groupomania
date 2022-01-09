@@ -43,7 +43,9 @@ class DatabaseSeeder extends Seeder
          Post::create([
              'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
              'user_id' => $admin->id,
-             'channel_id' => $public->id
+             'channel_id' => $public->id,
+             'likes' => json_encode([]),
+             'dislikes' => json_encode([]),
          ]);
 
         Post::create([
@@ -51,7 +53,9 @@ class DatabaseSeeder extends Seeder
             'body' => '<p>Happy New Year</p>',
             'image' => '/images/announcements/new_year.webp',
             'user_id' => $admin->id,
-            'channel_id' => $public->id
+            'channel_id' => $public->id,
+            'likes' => json_encode([]),
+            'dislikes' => json_encode([]),
         ]);
     }
 }

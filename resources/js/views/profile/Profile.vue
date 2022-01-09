@@ -12,6 +12,7 @@
                     </ul>
                </div>
                <div class="profile--body__option active" id="account">
+                   <h2>Update password</h2>
                    <div class="form-group">
                        <label for="current_password" class="col-md-4 col-form-label text-md-right"> Current password </label>
                        <input
@@ -53,6 +54,7 @@
                    </div>
                </div>
                <div class="profile--body__option" id="channel">
+                   <h2>Channels followed</h2>
                    <p>Currently you are subscribed to the following channels:</p>
                    <br>
                    <div class="form-group">
@@ -93,7 +95,6 @@ export default {
         handleTabClick(id) {
             const options = document.querySelectorAll('.profile--body__option');
             const tabs = document.querySelectorAll('.profile--body__controls li');
-            console.log(tabs)
             options.forEach(option => {
               option.classList.remove('active');
               if (option.id === id) {

@@ -40,6 +40,10 @@ class PostController extends Controller
     public function generalPosts() {
         $public = Department::where('name', 'public')->first();
         $posts = Post::with(['user', 'comments'])->where('channel_id', $public->id)->latest()->get();
+        foreach ($posts as $post) {
+            $post->likes = json_decode($post->likes);
+            $post->dislikes = json_decode($post->dislikes);
+        }
         return response()->json($posts);
     }
 

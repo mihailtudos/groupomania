@@ -1,16 +1,13 @@
 <template>
     <div class="widgets">
         <SearchBar />
-       <div v-if="loading">
-           <loading-container/>
-       </div>
-        <div v-else>
+        <div>
             <div class="widgets--container">
                 <h2>What's happening?</h2>
                 <blockquote v-for="(post, index) in posts" :key="index" class="twitter-tweet">
                     <p v-html="post.excerpt"></p>
                     <span style="display: flex; justify-content: flex-end">
-                        <router-link :to="{ name: 'announcement', params: { id: post.id} }">read more...</router-link>
+                        <router-link :to="{ name: 'announcement', params: { id: post.id } }">read more...</router-link>
                     </span>
                 </blockquote>
             </div>
@@ -23,26 +20,11 @@ import SearchBar from "../Shared/SearchBar";
 import LoadingContainer from "../Shared/LoadingContainer";
 export default {
     name: "Widget",
-    data() {
-      return {
-          posts: [],
-          loading: [],
-          errors: null
-      }
-    },
     components: {LoadingContainer, SearchBar},
-    created() {
-        this.loading = true;
-        axios.get('/api/admin/posts')
-            .then(response => {
-                this.posts = response.data
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            })
-            .then(() => {
-                this.loading = false;
-            });
+    computed: {
+        posts() {
+            return this.$store.getters["explorePosts/posts"];
+        }
     },
 }
 </script>

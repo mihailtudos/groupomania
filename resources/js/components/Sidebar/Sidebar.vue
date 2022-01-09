@@ -1,18 +1,18 @@
 <template>
-    <div class="sidebar">
+    <div class="sidebar" @click="handleMenuClick">
         <div class="sidebar--menu">
-            <router-link :to="{ name: 'home' }" class="sidebar--option active">
+            <router-link :to="{ name: 'home' }" class="sidebar--option active" >
                 <span class="material-icons">
                     <i class="fab fa-accusoft"></i>
                 </span>
                 <h2>Home</h2>
             </router-link>
-            <router-link :to="{ name: 'home' }" class="sidebar--option">
+            <router-link :to="{ name: 'explore' }" class="sidebar--option" id="explore" >
                 <span class="material-icons">
                     <i class="fas fa-search"></i>
                 </span>
                 <h2>Explore</h2>
-            </router-link>
+            </router-link >
             <div class="sidebar--option">
                 <span class="material-icons">
                     <i class="fas fa-bell"></i>
@@ -25,22 +25,22 @@
                 </span>
                 <h2>Messages</h2>
             </div>
-            <router-link v-if="user.id" :to="{name:'profile', params:{id: user.id} }" class="sidebar--option">
+            <router-link v-if="user.id" :to="{name:'profile', params:{id: user.id} }" class="sidebar--option" >
                 <span class="material-icons">
                     <i class="fas fa-id-badge"></i>
                 </span>
                 <h2>Profile</h2>
             </router-link>
         </div>
-        <div class="sidebar--footer">
+        <div class="sidebar--footer" >
             <div class="sidebar--footer__account">
                 <span>{{ user.name }}</span>
                 <i class="fas fa-sign-out-alt" @click="handleLogout"></i>
             </div>
             <div class="sidebar--footer__links">
-                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Policy</router-link>
-                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Cookie</router-link>
-                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">About</router-link>
+                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Policy</router-link >
+                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">Cookie</router-link >
+                <router-link class="sidebar--footer__link" :to="{ name: 'policy'}">About</router-link >
             </div>
             <div class="sidebar--footer__rights">
                 <p>Gropomania @2021 by Mihail Tudos</p>
@@ -57,6 +57,9 @@ export default {
     methods: {
         handleLogout() {
             this.$store.dispatch('currentUser/logout');
+        },
+        handleMenuClick() {
+            this.$emit('menuClicked');
         }
     },
     computed: {
@@ -143,6 +146,12 @@ $twitter-background: #e6ecf0;
                 cursor: pointer;
             }
         }
+    }
+}
+
+@media (min-width: 1000px) {
+    #explore {
+        display: none;
     }
 }
 @media (max-width: 650px) {
