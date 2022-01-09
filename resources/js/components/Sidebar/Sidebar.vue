@@ -7,7 +7,7 @@
                 </span>
                 <h2>Home</h2>
             </router-link>
-            <router-link :to="{ name: '' }" class="sidebar--option" id="explore" >
+            <router-link :to="{ name: 'explore' }" class="sidebar--option" id="explore" >
                 <span class="material-icons">
                     <i class="fas fa-search"></i>
                 </span>
