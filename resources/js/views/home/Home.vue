@@ -1,14 +1,15 @@
 <template>
     <div id="home">
-        <Modal @closeModal="show = false" :noCreate="1" title="Opps something went wrong">
-            <h3>We couldn't process your request please try again later :(</h3>
+        <Modal @closeModal="handleModalClose" :noCreate="1" :title="post ? 'Manage tweet' : 'Opps something went wrong'">
+            <h3 v-if="!editPostModalShow">We couldn't process your request please try again later :(</h3>
+            <TweetBox  @postUpdated="handlePostUpdated" :item="post" v-else @newPostCreated="handleNewPostCreated" />
         </Modal>
         <TweetBox @newPostCreated="handleNewPostCreated"/>
         <LoadingContainer v-if="loading" />
         <div v-else>
             <PostItem
                 @postDelete="handlePostDelete"
-                @postUpdate="handlePostUpdate"
+                @postEdit="handlePostUpdate"
                 v-for="(item, index) in posts"
                 :key="'post'+index"
                 :item="item"/>
@@ -26,10 +27,12 @@ export default {
     name: "Home",
     data() {
         return {
+            editPostModalShow: false,
             loading: false,
             posts: [],
             errors: [],
-            show: false
+            show: false,
+            post: null,
         }
     },
     components: {
@@ -41,6 +44,7 @@ export default {
     },
     created() {
         this.loading = true;
+        this.$store.dispatch('explorePosts/loadPosts');
         axios.get('api/posts')
         .then(response => {
             this.posts = response.data;
@@ -55,6 +59,13 @@ export default {
     methods: {
         handleNewPostCreated(post) {
             this.posts.unshift(post);
+            this.show = false;
+        },
+        handlePostUpdated(post) {
+            const idx = this.posts.findIndex(item => item.id === post.id);
+            this.posts.splice(idx,1);
+            this.posts.splice(idx, 0, post);
+            this.show = false;
         },
         async handlePostDelete(id) {
             try {
@@ -69,7 +80,9 @@ export default {
             }
         },
         handlePostUpdate(id) {
-
+            this.post = this.posts.find(p => p.id === id);
+            this.editPostModalShow = true;
+            this.show = true;
         },
         updatePostsList(id, action) {
             if (action === 'edited') {
@@ -79,6 +92,11 @@ export default {
             if (action === 'deleted') {
                 this.posts.splice(this.posts.findIndex(element => element.id === id),1);
             }
+        },
+        handleModalClose() {
+            this.show = false;
+            this.editPostModalShow = false;
+            this.post = null;
         }
     }
 }

@@ -69,9 +69,6 @@
                            <li><strong>@public</strong> - a channel that managers uses to share news, announcements and important information</li>
                            <li><strong>@{{profile}}</strong> - this is the main channel used by your department to share news, information and discussions</li>
                        </ul>
-                       <div style="display: flex; justify-content: flex-end;">
-                           <button class="btn-secondary">update</button>
-                       </div>
                    </div>
                </div>
            </div>
@@ -166,7 +163,6 @@ export default {
             this.profile = (await axios.post('/api/profiles/', {
                 userId: this.$route.params.id
             })).data;
-            console.log(this.profile);
         } catch (error) {
 
         }

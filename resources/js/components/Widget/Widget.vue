@@ -21,9 +21,10 @@ import LoadingContainer from "../Shared/LoadingContainer";
 export default {
     name: "Widget",
     components: {LoadingContainer, SearchBar},
+
     computed: {
-        posts() {
-            return this.$store.getters["explorePosts/posts"];
+       posts() {
+           return this.$store.getters["explorePosts/posts"]
         }
     },
 }

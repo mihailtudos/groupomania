@@ -10,6 +10,10 @@
                     </span>
                 <div class="input--group__input">
                     <input :maxlength="max" name="excerpt" id="excerpt" v-model="dataForm.excerpt" type="text" placeholder="What's happening?">
+                    <div v-if="imgUrl">
+                        <p>Selected image:</p>
+                        <img  :src="imgUrl" alt="Post image preview">
+                    </div>
                     <div class="details">
                         <span>
                             <v-error :errors="errorFor('excerpt')" />
@@ -22,7 +26,7 @@
             </div>
             <div class="footer">
                 <ImageFileBrowseIcon @imageUploaded="imageUploadHandler" :size="'20'"/>
-                <button class="tweet-button">Tweet</button>
+                <button class="tweet-button">{{ item ? 'Update' : 'Tweet' }}</button>
             </div>
         </form>
     </div>
@@ -41,10 +45,17 @@ export default {
             max: 160,
             loading: false,
             show: false,
+            imgUrl: null,
             dataForm: {
                 excerpt: '',
                 image: ''
             }
+        }
+    },
+    props: {
+        item: {
+            required: false,
+            type: Object,
         }
     },
     methods: {
@@ -62,9 +73,19 @@ export default {
             formData.append("excerpt", this.dataForm.excerpt);
             try {
                 this.loading = true;
-                const response = (await axios.post(`/api/posts`, formData));
+                let response = '';
+                if (!this.item) {
+                     response = (await axios.post(`/api/posts`, formData));
+                } else  {
+                    formData.append('_method', 'PATCH');
+                    response = (await axios.post(`/api/posts/${this.item.id}`, formData));
+                }
                 if (response.status >= 200 && response.status <= 202) {
-                    this.$emit('newPostCreated', response.data);
+                    if (this.item) {
+                        this.$emit('postUpdated', response.data);
+                    } else  {
+                        this.$emit('newPostCreated', response.data);
+                    }
                     this.resetData();
                 } else {
                     throw new Error('Something went wrong')
@@ -83,17 +104,26 @@ export default {
           this.resetData();
         },
         resetData() {
-            this.loading = false,
-            this.show = false,
+            this.loading = false;
+            this.show = false;
             this.dataForm = {
                 excerpt: '',
                 image: ''
-            }
+            };
+            this.errors = false;
         },
         imageUploadHandler(file) {
+            this.imgUrl = URL.createObjectURL(file);
+            URL.revokeObjectURL(file); // free memory
             this.dataForm.image = file;
         }
-    }
+    },
+    created() {
+        if (this.item) {
+            this.dataForm.excerpt = this.item.excerpt;
+            this.imgUrl = this.item.image;
+        }
+    },
 }
 </script>
 
@@ -127,6 +157,14 @@ $twitter-background: #e6ecf0;
                 justify-content: space-between;
                 gap: .3rem;
                 margin-left: 20px;
+                p {
+                    margin: 1rem 0;
+                }
+                img {
+                    object-fit: contain;
+                    max-width: 300px;
+                    border-radius: 10px;
+                }
                 .details {
                     display: flex;
                     justify-content: inherit;
