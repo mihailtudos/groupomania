@@ -40,15 +40,15 @@ class DatabaseSeeder extends Seeder
 
          $public = Department::where('name', 'public')->first();
 
-         Post::create([
-             'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
-             'user_id' => $admin->id,
-             'channel_id' => $public->id,
-             'likes' => json_encode([]),
-             'dislikes' => json_encode([]),
-         ]);
+         Post::factory([
+            'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
+            'user_id' => $admin->id,
+            'channel_id' => $public->id,
+            'likes' => json_encode([]),
+            'dislikes' => json_encode([]),
+        ])->create();
 
-        Post::create([
+        Post::factory([
             'excerpt' => '<p>Happy New Year</p>',
             'body' => '<p>Happy New Year</p>',
             'image' => '/images/announcements/new_year.webp',
@@ -56,6 +56,6 @@ class DatabaseSeeder extends Seeder
             'channel_id' => $public->id,
             'likes' => json_encode([]),
             'dislikes' => json_encode([]),
-        ]);
+        ])->create();
     }
 }
