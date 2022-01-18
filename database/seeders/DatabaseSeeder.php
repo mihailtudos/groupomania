@@ -40,22 +40,22 @@ class DatabaseSeeder extends Seeder
 
          $public = Department::where('name', 'public')->first();
 
-         Post::factory([
-            'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
-            'user_id' => $admin->id,
-            'channel_id' => $public->id,
-            'likes' => json_encode([]),
-            'dislikes' => json_encode([]),
-        ])->create();
-
-        Post::factory([
-            'excerpt' => '<p>Happy New Year</p>',
-            'body' => '<p>Happy New Year</p>',
-            'image' => '/images/announcements/new_year.webp',
-            'user_id' => $admin->id,
-            'channel_id' => $public->id,
-            'likes' => json_encode([]),
-            'dislikes' => json_encode([]),
-        ])->create();
+//         Post::factory([
+//            'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
+//            'user_id' => $admin->id,
+//            'channel_id' => $public->id,
+//            'likes' => json_encode([]),
+//            'dislikes' => json_encode([]),
+//        ])->create();
+//
+//        Post::factory([
+//            'excerpt' => '<p>Happy New Year</p>',
+//            'body' => '<p>Happy New Year</p>',
+//            'image' => '/images/announcements/new_year.webp',
+//            'user_id' => $admin->id,
+//            'channel_id' => $public->id,
+//            'likes' => json_encode([]),
+//            'dislikes' => json_encode([]),
+//        ])->create();
     }
 }
