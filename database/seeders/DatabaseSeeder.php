@@ -25,13 +25,27 @@ class DatabaseSeeder extends Seeder
         };
 
          $admin = User::factory(['email' => 'admin@admin.com', 'department_id' => 1])->create();
-
+         $department = Department::where('name', 'Public')->first();
          for($i = 0; $i < 10; $i++) {
              $user = User::factory()->create();
              $post = Post::factory([
                  'user_id' => $user->id,
                  'channel_id' => $user->department->id
              ])->create();
+             if ($i === 0) {
+                 $post = Post::factory([
+                     'excerpt' => '<p>@memebers, the management wants to invite you to the all hands meeting</p>',
+                     'user_id' => $admin->id,
+                     'channel_id' => $department->id,
+                 ])->create();
+                 $post = Post::factory([
+                     'excerpt' => '<p>Happy New Year</p>',
+                     'body' => '<p>Happy New Year</p>',
+                     'image' => '/images/announcements/new_year.webp',
+                     'user_id' => $admin->id,
+                     'channel_id' => $department->id,
+                 ])->create();
+             }
              Comment::factory([
                  'user_id' => $user->id,
                  'post_id' => $post->id

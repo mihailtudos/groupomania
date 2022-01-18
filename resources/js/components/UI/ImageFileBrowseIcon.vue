@@ -5,7 +5,7 @@
                 cursor: pointer;`"
            class="far fa-image"
            @click="openFileOption"></i>
-        <input @change="onFileChange" type="file" id="image" style="display:none">
+        <input @change="onFileChange" type="file" id="image" style="display:none" name="image">
         <img :src="imagePreviewURL" alt="">
     </div>
 </template>

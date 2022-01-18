@@ -1,6 +1,10 @@
 <template>
     <div class="sidebar" @click="handleMenuClick">
         <div class="sidebar--menu">
+
+            <router-link :to="{ name: 'home' }" class="sidebar--option active" >
+                <img src="/images/logo/logo.svg" alt="Gropomania logo" height="50px" width="200px">
+            </router-link>
             <router-link :to="{ name: 'home' }" class="sidebar--option active" >
                 <span class="material-icons">
                     <i class="fab fa-accusoft"></i>

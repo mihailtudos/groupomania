@@ -3178,6 +3178,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -3313,6 +3316,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     resetData: function resetData() {
       this.loading = false;
       this.show = false;
+      this.imgUrl = null;
       this.dataForm = {
         excerpt: '',
         image: ''
@@ -3543,6 +3547,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Shared_TweetButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/TweetButton */ "./resources/js/components/Shared/TweetButton.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -10272,7 +10280,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -68024,7 +68032,17 @@ var render = function() {
                     _vm._v(" "),
                     _c("img", {
                       attrs: { src: _vm.imgUrl, alt: "Post image preview" }
-                    })
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      [
+                        _c("v-error", {
+                          attrs: { errors: _vm.errorFor("image") }
+                        })
+                      ],
+                      1
+                    )
                   ])
                 : _vm._e(),
               _vm._v(" "),
@@ -68346,6 +68364,24 @@ var render = function() {
               attrs: { to: { name: "home" } }
             },
             [
+              _c("img", {
+                attrs: {
+                  src: "/images/logo/logo.svg",
+                  alt: "Gropomania logo",
+                  height: "50px",
+                  width: "200px"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "sidebar--option active",
+              attrs: { to: { name: "home" } }
+            },
+            [
               _c("span", { staticClass: "material-icons" }, [
                 _c("i", { staticClass: "fab fa-accusoft" })
               ]),
@@ -68638,7 +68674,7 @@ var render = function() {
     _vm._v(" "),
     _c("input", {
       staticStyle: { display: "none" },
-      attrs: { type: "file", id: "image" },
+      attrs: { type: "file", id: "image", name: "image" },
       on: { change: _vm.onFileChange }
     }),
     _vm._v(" "),

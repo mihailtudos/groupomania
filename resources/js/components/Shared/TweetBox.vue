@@ -13,6 +13,9 @@
                     <div v-if="imgUrl">
                         <p>Selected image:</p>
                         <img  :src="imgUrl" alt="Post image preview">
+                        <span>
+                            <v-error :errors="errorFor('image')" />
+                        </span>
                     </div>
                     <div class="details">
                         <span>
@@ -106,6 +109,7 @@ export default {
         resetData() {
             this.loading = false;
             this.show = false;
+            this.imgUrl = null;
             this.dataForm = {
                 excerpt: '',
                 image: ''
