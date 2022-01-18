@@ -2133,6 +2133,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var sidebar = document.querySelector('.sidebar');
       overlap.classList.toggle('show-menu');
       sidebar.classList.toggle('show-sidebar');
+    },
+    mobileOnlyMenuHandler: function mobileOnlyMenuHandler() {
+      var overlap = document.querySelector('#overlap');
+      var sidebar = document.querySelector('.sidebar');
+      overlap.classList.remove('show-menu');
+      sidebar.classList.remove('show-sidebar');
     }
   },
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)({
@@ -2146,7 +2152,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   }),
-  created: function created() {
+  beforeCreate: function beforeCreate() {
     this.$store.dispatch('explorePosts/loadPosts');
   }
 });
@@ -3168,6 +3174,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -3183,11 +3193,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       max: 160,
       loading: false,
       show: false,
+      imgUrl: null,
       dataForm: {
         excerpt: '',
         image: ''
       }
     };
+  },
+  props: {
+    item: {
+      required: false,
+      type: Object
+    }
   },
   methods: {
     submitForm: function () {
@@ -3217,32 +3234,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append("excerpt", this.dataForm.excerpt);
                 _context.prev = 6;
                 this.loading = true;
-                _context.next = 10;
-                return axios.post("/api/posts", formData);
+                response = '';
 
-              case 10:
-                response = _context.sent;
-
-                if (!(response.status >= 200 && response.status <= 202)) {
-                  _context.next = 16;
+                if (this.item) {
+                  _context.next = 15;
                   break;
                 }
 
-                this.$emit('newPostCreated', response.data);
-                this.resetData();
-                _context.next = 17;
+                _context.next = 12;
+                return axios.post("/api/posts", formData);
+
+              case 12:
+                response = _context.sent;
+                _context.next = 19;
                 break;
 
-              case 16:
+              case 15:
+                formData.append('_method', 'PATCH');
+                _context.next = 18;
+                return axios.post("/api/posts/".concat(this.item.id), formData);
+
+              case 18:
+                response = _context.sent;
+
+              case 19:
+                if (!(response.status >= 200 && response.status <= 202)) {
+                  _context.next = 24;
+                  break;
+                }
+
+                if (this.item) {
+                  this.$emit('postUpdated', response.data);
+                } else {
+                  this.$emit('newPostCreated', response.data);
+                }
+
+                this.resetData();
+                _context.next = 25;
+                break;
+
+              case 24:
                 throw new Error('Something went wrong');
 
-              case 17:
+              case 25:
                 this.loading = false;
-                _context.next = 24;
+                _context.next = 32;
                 break;
 
-              case 20:
-                _context.prev = 20;
+              case 28:
+                _context.prev = 28;
                 _context.t0 = _context["catch"](6);
 
                 if (_context.t0.response.status === 422) {
@@ -3253,12 +3293,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 this.loading = false;
 
-              case 24:
+              case 32:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[6, 20]]);
+        }, _callee, this, [[6, 28]]);
       }));
 
       function submitForm() {
@@ -3271,13 +3311,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.resetData();
     },
     resetData: function resetData() {
-      this.loading = false, this.show = false, this.dataForm = {
+      this.loading = false;
+      this.show = false;
+      this.dataForm = {
         excerpt: '',
         image: ''
       };
+      this.errors = false;
     },
     imageUploadHandler: function imageUploadHandler(file) {
+      this.imgUrl = URL.createObjectURL(file);
+      URL.revokeObjectURL(file); // free memory
+
       this.dataForm.image = file;
+    }
+  },
+  created: function created() {
+    if (this.item) {
+      this.dataForm.excerpt = this.item.excerpt;
+      this.imgUrl = this.item.image;
     }
   }
 });
@@ -3680,8 +3732,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImageFileBrowseIcon",
+  data: function data() {
+    return {
+      imagePreviewURL: null
+    };
+  },
   methods: {
     openFileOption: function openFileOption() {
       document.getElementById("image").click();
@@ -3904,6 +3962,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -3913,10 +3972,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   name: "Home",
   data: function data() {
     return {
+      editPostModalShow: false,
       loading: false,
       posts: [],
       errors: [],
-      show: false
+      show: false,
+      post: null
     };
   },
   components: {
@@ -3930,6 +3991,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _this = this;
 
     this.loading = true;
+    this.$store.dispatch('explorePosts/loadPosts');
     axios.get('api/posts').then(function (response) {
       _this.posts = response.data;
     })["catch"](function (error) {
@@ -3941,6 +4003,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     handleNewPostCreated: function handleNewPostCreated(post) {
       this.posts.unshift(post);
+      this.show = false;
+    },
+    handlePostUpdated: function handlePostUpdated(post) {
+      var idx = this.posts.findIndex(function (item) {
+        return item.id === post.id;
+      });
+      this.posts.splice(idx, 1);
+      this.posts.splice(idx, 0, post);
+      this.show = false;
     },
     handlePostDelete: function handlePostDelete(id) {
       var _this2 = this;
@@ -3983,7 +4054,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[0, 10]]);
       }))();
     },
-    handlePostUpdate: function handlePostUpdate(id) {},
+    handlePostUpdate: function handlePostUpdate(id) {
+      this.post = this.posts.find(function (p) {
+        return p.id === id;
+      });
+      this.editPostModalShow = true;
+      this.show = true;
+    },
     updatePostsList: function updatePostsList(id, action) {
       var _this3 = this;
 
@@ -3998,6 +4075,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           return element.id === id;
         }), 1);
       }
+    },
+    handleModalClose: function handleModalClose() {
+      this.show = false;
+      this.editPostModalShow = false;
+      this.post = null;
     }
   }
 });
@@ -4300,10 +4382,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.comments.splice(this.comments.findIndex(function (element) {
           return element.id === comment;
         }), 1);
+        this.post.comments = this.comments;
       }
 
       if (action === 'created') {
         this.comments.push(comment);
+        this.post.comments.push(comment);
         this.commentsSize = this.comments.length;
         this.scrollToBottom();
       }
@@ -4373,9 +4457,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
 //
 //
 //
@@ -4599,23 +4680,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               _this2.profile = _context2.sent.data;
-              console.log(_this2.profile);
-              _context2.next = 10;
+              _context2.next = 9;
               break;
 
-            case 8:
-              _context2.prev = 8;
+            case 7:
+              _context2.prev = 7;
               _context2.t0 = _context2["catch"](1);
 
-            case 10:
+            case 9:
               _this2.loading = false;
 
-            case 11:
+            case 10:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 8]]);
+      }, _callee2, null, [[1, 7]]);
     }))();
   }
 });
@@ -9880,7 +9960,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".tweet-box[data-v-7ff8f289] {\n  padding: 1rem;\n  border-bottom: 8px solid #e6ecf0;\n  background-color: white;\n}\n.tweet-box form[data-v-7ff8f289] {\n  width: 100%;\n}\n.tweet-box form .input--group[data-v-7ff8f289] {\n  width: 100%;\n  display: flex;\n}\n.tweet-box form .input--group span.material-icons[data-v-7ff8f289] {\n  border-radius: 50px;\n  font-size: 60px;\n}\n.tweet-box form .input--group input[data-v-7ff8f289] {\n  width: 100%;\n  font-size: 20px;\n  border: none;\n  outline: none;\n}\n.tweet-box form .input--group__input[data-v-7ff8f289] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  gap: 0.3rem;\n  margin-left: 20px;\n}\n.tweet-box form .input--group__input .details[data-v-7ff8f289] {\n  display: flex;\n  justify-content: inherit;\n  align-items: center;\n  margin-bottom: 0.5rem;\n  font-size: 0.7rem;\n}\n.tweet-box form .footer[data-v-7ff8f289] {\n  display: flex;\n  justify-content: flex-end;\n  align-items: center;\n}\n.tweet-box form .footer button[data-v-7ff8f289] {\n  background-color: #50b7f5;\n  border: none;\n  color: white;\n  font-weight: 900;\n  border-radius: 30px;\n  width: 100px;\n  height: 40px;\n  cursor: pointer;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".tweet-box[data-v-7ff8f289] {\n  padding: 1rem;\n  border-bottom: 8px solid #e6ecf0;\n  background-color: white;\n}\n.tweet-box form[data-v-7ff8f289] {\n  width: 100%;\n}\n.tweet-box form .input--group[data-v-7ff8f289] {\n  width: 100%;\n  display: flex;\n}\n.tweet-box form .input--group span.material-icons[data-v-7ff8f289] {\n  border-radius: 50px;\n  font-size: 60px;\n}\n.tweet-box form .input--group input[data-v-7ff8f289] {\n  width: 100%;\n  font-size: 20px;\n  border: none;\n  outline: none;\n}\n.tweet-box form .input--group__input[data-v-7ff8f289] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  gap: 0.3rem;\n  margin-left: 20px;\n}\n.tweet-box form .input--group__input p[data-v-7ff8f289] {\n  margin: 1rem 0;\n}\n.tweet-box form .input--group__input img[data-v-7ff8f289] {\n  -o-object-fit: contain;\n     object-fit: contain;\n  max-width: 300px;\n  border-radius: 10px;\n}\n.tweet-box form .input--group__input .details[data-v-7ff8f289] {\n  display: flex;\n  justify-content: inherit;\n  align-items: center;\n  margin-bottom: 0.5rem;\n  font-size: 0.7rem;\n}\n.tweet-box form .footer[data-v-7ff8f289] {\n  display: flex;\n  justify-content: flex-end;\n  align-items: center;\n}\n.tweet-box form .footer button[data-v-7ff8f289] {\n  background-color: #50b7f5;\n  border: none;\n  color: white;\n  font-weight: 900;\n  border-radius: 30px;\n  width: 100px;\n  height: 40px;\n  cursor: pointer;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10192,7 +10272,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\r\n    display: block;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-control.is-invalid ~ div > .invalid-feedback[data-v-109d0e33] {\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -66740,7 +66820,7 @@ var render = function() {
           "div",
           { attrs: { id: "app-container" } },
           [
-            _c("Sidebar"),
+            _c("Sidebar", { on: { menuClicked: _vm.mobileOnlyMenuHandler } }),
             _vm._v(" "),
             _c(
               "div",
@@ -67938,6 +68018,16 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
+              _vm.imgUrl
+                ? _c("div", [
+                    _c("p", [_vm._v("Selected image:")]),
+                    _vm._v(" "),
+                    _c("img", {
+                      attrs: { src: _vm.imgUrl, alt: "Post image preview" }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
               _c("div", { staticClass: "details" }, [
                 _c(
                   "span",
@@ -67969,7 +68059,9 @@ var render = function() {
                 on: { imageUploaded: _vm.imageUploadHandler }
               }),
               _vm._v(" "),
-              _c("button", { staticClass: "tweet-button" }, [_vm._v("Tweet")])
+              _c("button", { staticClass: "tweet-button" }, [
+                _vm._v(_vm._s(_vm.item ? "Update" : "Tweet"))
+              ])
             ],
             1
           )
@@ -68548,7 +68640,9 @@ var render = function() {
       staticStyle: { display: "none" },
       attrs: { type: "file", id: "image" },
       on: { change: _vm.onFileChange }
-    })
+    }),
+    _vm._v(" "),
+    _c("img", { attrs: { src: _vm.imagePreviewURL, alt: "" } })
   ])
 }
 var staticRenderFns = []
@@ -68790,18 +68884,28 @@ var render = function() {
       _c(
         "Modal",
         {
-          attrs: { noCreate: 1, title: "Opps something went wrong" },
-          on: {
-            closeModal: function($event) {
-              _vm.show = false
-            }
-          }
+          attrs: {
+            noCreate: 1,
+            title: _vm.post ? "Manage tweet" : "Opps something went wrong"
+          },
+          on: { closeModal: _vm.handleModalClose }
         },
         [
-          _c("h3", [
-            _vm._v("We couldn't process your request please try again later :(")
-          ])
-        ]
+          !_vm.editPostModalShow
+            ? _c("h3", [
+                _vm._v(
+                  "We couldn't process your request please try again later :("
+                )
+              ])
+            : _c("TweetBox", {
+                attrs: { item: _vm.post },
+                on: {
+                  postUpdated: _vm.handlePostUpdated,
+                  newPostCreated: _vm.handleNewPostCreated
+                }
+              })
+        ],
+        1
       ),
       _vm._v(" "),
       _c("TweetBox", { on: { newPostCreated: _vm.handleNewPostCreated } }),
@@ -68816,7 +68920,7 @@ var render = function() {
                 attrs: { item: item },
                 on: {
                   postDelete: _vm.handlePostDelete,
-                  postUpdate: _vm.handlePostUpdate
+                  postEdit: _vm.handlePostUpdate
                 }
               })
             }),
@@ -69378,9 +69482,7 @@ var render = function() {
                           " - this is the main channel used by your department to share news, information and discussions"
                         )
                       ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(1)
+                    ])
                   ]
                 )
               ])
@@ -69402,16 +69504,6 @@ var staticRenderFns = [
         " - a channel that managers uses to share news, announcements and important information"
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticStyle: { display: "flex", "justify-content": "flex-end" } },
-      [_c("button", { staticClass: "btn-secondary" }, [_vm._v("update")])]
-    )
   }
 ]
 render._withStripped = true

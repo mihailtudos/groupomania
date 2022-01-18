@@ -6,12 +6,18 @@
            class="far fa-image"
            @click="openFileOption"></i>
         <input @change="onFileChange" type="file" id="image" style="display:none">
+        <img :src="imagePreviewURL" alt="">
     </div>
 </template>
 
 <script>
 export default {
     name: "ImageFileBrowseIcon",
+    data() {
+      return {
+          imagePreviewURL: null
+      }
+    },
     methods: {
         openFileOption() {
             document.getElementById("image").click();
@@ -30,7 +36,7 @@ export default {
             required: false,
             default: '20'
         }
-    }
+    },
 }
 </script>
 

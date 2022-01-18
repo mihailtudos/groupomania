@@ -164,10 +164,12 @@ export default {
 
             if (action === 'deleted') {
                 this.comments.splice(this.comments.findIndex(element => element.id === comment),1);
+                this.post.comments = this.comments;
             }
 
             if (action === 'created') {
                 this.comments.push(comment);
+                this.post.comments.push(comment);
                 this.commentsSize = this.comments.length;
                 this.scrollToBottom();
             }

@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['user', 'comments'])->where('channel_id', auth()->user()->id)->latest()->get();
+        $posts = Post::with(['user', 'comments'])->where('channel_id', auth()->user()->department_id)->latest()->get();
 
         foreach ($posts as $post) {
             $post->likes = json_decode($post->likes);
@@ -119,11 +119,52 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'excerpt' => ['required', 'min:15', 'max: 160'],
+        ]);
+
+        $filePath = '';
+        $post = Post::find($id);
+
+        // ensure the request has a file before we attempt anything else.
+        if ($request->has('image') and $request->image) {
+            $request->validate([
+                'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
+            ]);
+
+            //delete old image
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+
+            // Get image file
+            $image = $request->file('image');
+
+            //image name
+            $name = time();
+
+            // Define folder path
+            $folder = '/uploads/posts/';
+
+            // Make a file path where image will be stored [ folder path + file name + file extension]
+            $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
+
+            // Upload image
+            $this->uploadOne($image, $folder, 'public', $name);
+        }
+
+        $post->update([
+           'excerpt' => $validatedData['excerpt'],
+            'image' => strlen($filePath) ? $filePath : $post->image,
+        ]);
+        $post = Post::with(['user', 'comments'])->where('id', $post->id)->first();
+        $post->likes = json_decode('[]');
+        $post->dislikes = json_decode('[]');
+        return response()->json($post);
     }
 
     /**

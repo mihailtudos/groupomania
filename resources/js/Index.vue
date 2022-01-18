@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="app-container" v-if="loggedIn">
-            <Sidebar />
+            <Sidebar @menuClicked="mobileOnlyMenuHandler"/>
             <div class="content">
                 <div id="overlap" @click="mobileMenuHandler"></div>
                 <div class="content__header">
@@ -40,6 +40,12 @@ export default {
             const sidebar = document.querySelector('.sidebar');
             overlap.classList.toggle('show-menu');
             sidebar.classList.toggle('show-sidebar');
+        },
+        mobileOnlyMenuHandler(){
+            const overlap = document.querySelector('#overlap');
+            const sidebar = document.querySelector('.sidebar');
+            overlap.classList.remove('show-menu');
+            sidebar.classList.remove('show-sidebar');
         }
     },
     computed: {
@@ -55,7 +61,7 @@ export default {
             }
         },
     },
-    created() {
+    beforeCreate() {
         this.$store.dispatch('explorePosts/loadPosts');
     }
 }
