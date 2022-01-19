@@ -25,7 +25,7 @@ Route::prefix('user')->group(function () {
 });
 Route::apiResource('/posts', PostController::class);
 Route::post('/profiles', ProfileController::class);
-Route::get('/admin/posts', [PostController::class, 'generalPosts']);
+Route::get('/admin/posts', [PostController::class, 'announcements']);
 Route::apiResource('/comments', CommentsController::class)->middleware('auth')->except('index');
 Route::get('/posts/{id}/comments', [PostController::class, 'comments']);
 Route::post('/{id}/likes', LikesHandler::class);

@@ -2151,10 +2151,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return this.$store.state.currentUser.isLoggedIn;
       }
     }
-  }),
-  beforeCreate: function beforeCreate() {
-    this.$store.dispatch('explorePosts/loadPosts');
-  }
+  })
 });
 
 /***/ }),

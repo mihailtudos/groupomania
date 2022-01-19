@@ -37,7 +37,7 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
-    public function generalPosts() {
+    public function announcements() {
         $public = Department::where('name', 'public')->first();
         $posts = Post::with(['user', 'comments'])->where('channel_id', $public->id)->latest()->get();
         foreach ($posts as $post) {

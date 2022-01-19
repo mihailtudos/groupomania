@@ -61,9 +61,6 @@ export default {
             }
         },
     },
-    beforeCreate() {
-        this.$store.dispatch('explorePosts/loadPosts');
-    }
 }
 </script>
 
